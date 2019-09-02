@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- API Key  -->
+    <string name="api_key">RT12#$@455!@!@#WQ</string>
+
+    <string name="app_name">Boorna</string>
+    <!--Set Your Application version -->
+    <string name="app_version">1.0</string>
+    <!-- BASE API URL (PLASE SET  LIKE THIS http://domain.com) -->
+    <string name="BASE_URL">http://10.1.1.22/boorna/</string>
+
+    <!-- DEFAULT HOST -->
+    <string name="DEFAULT_HOST">www.apixu.com</string>
+
+
+    <!-- APP DESIGN -->
+    <!-- Set your theme color  -->
+    <item type="color" name="colorPrimary">#e3af12</item>
+    <item type="color" name="colorAccent">#b7b6b4</item>
+    <item type="color" name="colorPrimaryDark">#000000</item>
+    <item type="color" name="colorPromo">#25323f</item>
+    <item type="color" name="iconColor">#fdd14c</item>
+    <item type="color" name="iconDisableColor">#c6c6c6</item>
+
+
+</resources>

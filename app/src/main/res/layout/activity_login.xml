@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg_color">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/signIn_btn"
+                android:layout_marginRight="@dimen/_15"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_20" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_15"
+                android:layout_marginRight="@dimen/_15"
+                android:hint="@string/ht_email"
+                android:layout_marginTop="@dimen/_10"
+                android:background="@drawable/box_edittext"
+                android:lines="1"
+                android:padding="@dimen/_10"
+                app:backgroundTint="@color/edt_txt_underline" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_15"
+                    android:layout_marginRight="@dimen/_15"
+                    android:layout_marginTop="@dimen/_15"
+                    android:hint="@string/ht_pass3"
+                    android:background="@drawable/box_edittext"
+                    android:lines="1"
+                    android:padding="@dimen/_10"
+                    app:backgroundTint="@color/edt_txt_underline" />
+
+
+
+
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/btnSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40"
+                android:layout_marginLeft="@dimen/_15"
+                android:layout_marginRight="@dimen/_15"
+                android:layout_marginTop="@dimen/_10"
+                android:background="@drawable/rectangle_button"
+                android:onClick="btnSignIn"
+                android:text="@string/signIn_btn"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12" />
+
+            <TextView
+                android:id="@+id/tvForgotPswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10"
+                android:layout_marginRight="@dimen/_24"
+                android:layout_marginTop="@dimen/_10"
+                android:onClick="tvForgotPswd"
+                android:gravity="right"
+                android:text="Forgot ?"
+                android:textSize="@dimen/_16" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_transparent"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="@dimen/_24"
+            android:layout_height="@dimen/_24"
+            android:layout_gravity="center"
+            android:src="@drawable/gallery_gif_loader" />
+
+    </FrameLayout>
+
+
+</FrameLayout>
