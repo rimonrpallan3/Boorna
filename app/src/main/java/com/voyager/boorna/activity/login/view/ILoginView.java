@@ -12,4 +12,5 @@ public interface ILoginView {
     void setLoader(int visibility);
     void onSetProgressBarVisibility(int visibility);
     void unSubscribeCalls(Disposable dMainListObservable);
+    void onLoginResult(Boolean result, int code);
 }

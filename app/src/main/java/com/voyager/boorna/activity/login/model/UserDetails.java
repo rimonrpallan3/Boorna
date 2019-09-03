@@ -51,6 +51,8 @@ public class UserDetails implements IUserDetials, Parcelable {
     private String domain_name;
     private String logo;
     private String email;
+    private String password;
+    private String fcmToken;
     private String contact_num;
     private String inv_address;
     private String inv_town;
@@ -76,6 +78,22 @@ public class UserDetails implements IUserDetials, Parcelable {
     private int user_status;
     private String user_name;
     private String user_employee_name;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
 
     public int getFranchise_id() {
         return franchise_id;
@@ -340,6 +358,8 @@ public class UserDetails implements IUserDetials, Parcelable {
         dest.writeString(this.domain_name);
         dest.writeString(this.logo);
         dest.writeString(this.email);
+        dest.writeString(this.password);
+        dest.writeString(this.fcmToken);
         dest.writeString(this.contact_num);
         dest.writeString(this.inv_address);
         dest.writeString(this.inv_town);
@@ -377,6 +397,8 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.domain_name = in.readString();
         this.logo = in.readString();
         this.email = in.readString();
+        this.password = in.readString();
+        this.fcmToken = in.readString();
         this.contact_num = in.readString();
         this.inv_address = in.readString();
         this.inv_town = in.readString();
@@ -415,4 +437,12 @@ public class UserDetails implements IUserDetials, Parcelable {
             return new UserDetails[size];
         }
     };
+
+    @Override
+    public int checkUserValidity(String name, String passwd) {
+        if (email==null||passwd==null||!email.equals(getEmail())||!passwd.equals(getPassword())){
+            return -1;
+        }
+        return 0;
+    }
 }

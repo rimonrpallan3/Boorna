@@ -6,9 +6,13 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.voyager.boorna.BuildConfig;
 import com.voyager.boorna.appconfig.AppConfig;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -43,10 +47,18 @@ public class ApiClient {
                 System.out.println("logging  BASE_URL : "+BASE_URL);
             }
             OkHttpClient client = new OkHttpClient.Builder().
+                    addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request request = chain.request().newBuilder().addHeader("parameter", "value").build();
+                            return chain.proceed(request);
+                        }
+                    }).
                     addInterceptor(logging).
                     connectTimeout(300, TimeUnit.SECONDS).
                     readTimeout(300, TimeUnit.SECONDS).
                     build();
+
             Gson gson = new GsonBuilder()
                     .setLenient()
                     .create();

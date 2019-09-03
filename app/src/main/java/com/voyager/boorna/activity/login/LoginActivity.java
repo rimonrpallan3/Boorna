@@ -12,11 +12,14 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.login.presenter.ILoginPresenter;
 import com.voyager.boorna.activity.login.presenter.LoginPresenter;
 import com.voyager.boorna.activity.login.view.ILoginView;
 import com.voyager.boorna.appconfig.Helper;
+import com.voyager.boorna.appconfig.NetworkDetector;
 
 
 import io.reactivex.disposables.Disposable;
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     Bundle bundle;
     String language = "";
     Disposable dMainListObservable;
+    String fireBaseToken="";
 
 
     @Override
@@ -60,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         editor = sharedPrefs.edit();
         loadingLayout = (FrameLayout) findViewById(R.id.loadingLayout);
         iLoginPresenter = new LoginPresenter(this);
+        fireBaseToken = FirebaseInstanceId.getInstance().getToken();
 
     }
 
@@ -74,7 +79,33 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 
     public void btnSignIn(View view){
-        iLoginPresenter.doLogin(etEmail.getText().toString(),etCPass);
+        Helper.hideKeyboard(this);
+        if(NetworkDetector.haveNetworkConnection(this)){
+            //Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network_available), Snackbar.LENGTH_SHORT).show();
+            iLoginPresenter.setProgressBarVisiblity(View.VISIBLE);
+            btnSignIn.setEnabled(false);
+            iLoginPresenter.doLogin(etEmail.getText().toString(), etCPass.getText().toString(),fireBaseToken);
+        }else {
+            Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network), Snackbar.LENGTH_LONG).show();
+
+        }
+        iLoginPresenter.doLogin(etEmail.getText().toString(),etCPass.getText().toString(),fireBaseToken);
+    }
+
+    @Override
+    public void onLoginResult(Boolean result, int code) {
+        iLoginPresenter.setProgressBarVisiblity(View.INVISIBLE);
+        btnSignInGoogle.setEnabled(true);
+        btnSignInFB.setEnabled(true);
+        btnSignIn.setEnabled(true);
+        if (result){
+        }
+        else {
+            //Toast.makeText(this, "Please input Values, code = " + code, Toast.LENGTH_SHORT).show();
+            btnSignInGoogle.setEnabled(true);
+            btnSignInFB.setEnabled(true);
+            btnSignIn.setEnabled(true);
+        }
     }
 
    /* @Override

@@ -18,7 +18,9 @@ public class LoginPresenter implements ILoginPresenter{
     ILoginView iLoginView;
     private static final String TAG = "LoginPresenter";
     UserDetails userDetails;
-
+    String name;
+    String passwd;
+    String fireBaseToken="";
 
 
     public LoginPresenter(ILoginView iLoginView) {
@@ -27,14 +29,13 @@ public class LoginPresenter implements ILoginPresenter{
 
 
 
-   /* @Override
+    @Override
     public void doLogin(String name, String passwd, String fireBaseToken) {
         this.name = name;
         this.passwd = passwd;
         this.fireBaseToken = fireBaseToken;
         UserDetails userDetails = new UserDetails();
-        userDetails.setLoginType(normal);
-        userDetails.setFcm(fireBaseToken);
+        userDetails.setFcmToken(fireBaseToken);
         System.out.println("------- doLogin  email : "+ name +
                 " Password : " + passwd);
         initUser();
@@ -44,7 +45,7 @@ public class LoginPresenter implements ILoginPresenter{
         final Boolean result = isLoginSuccess;
         iLoginView.onLoginResult(result, code);
         validateLoginDataBaseApi(userDetails);
-    }*/
+    }
 
 
 
@@ -108,12 +109,6 @@ public class LoginPresenter implements ILoginPresenter{
     }
 
 
-
-
-    @Override
-    public void doLogin(String emailPhno, String passwd, String fireBaseToken) {
-
-    }
 
     @Override
     public void setProgressBarVisiblity(int visiblity) {
