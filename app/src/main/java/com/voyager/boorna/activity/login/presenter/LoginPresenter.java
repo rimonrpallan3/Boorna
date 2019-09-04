@@ -1,13 +1,17 @@
 package com.voyager.boorna.activity.login.presenter;
 
 import android.util.Log;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.activity.login.view.ILoginView;
+import com.voyager.boorna.webservices.ApiClient;
+import com.voyager.boorna.webservices.WebServices;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 /**
  * Created by User on 23-Jan-19.
@@ -50,29 +54,15 @@ public class LoginPresenter implements ILoginPresenter{
 
 
     public void validateLoginDataBaseApi(final UserDetails userDetails){
-      /*  Retrofit retrofit = new ApiClient().getRetrofitClient();
+        Retrofit retrofit = new ApiClient().getRetrofitClient();
         final WebServices webServices = retrofit.create(WebServices.class);
         Observable<UserDetails> getLoginObservable;
-        if(userDetails.getLoginType().equals(google)) {
-            getLoginObservable = webServices.loginGoogleUser(userDetails.getEmail(), userDetails.getLoginType(), userDetails.getProfile_image(),userDetails.getUsermob(),userDetails.getUserName(),userDetails.getGoogleId(),userDetails.getFcm());
-            loginType = userDetails.getLoginType() ;
-        }else if(userDetails.getLoginType().equals(normal)){
-            getLoginObservable = webServices.loginNormalUser(name, passwd, userDetails.getLoginType(),userDetails.getFcm());
-            loginType = userDetails.getLoginType() ;
-        }else if(userDetails.getLoginType().equals(facebook)){
-            getLoginObservable = webServices.loginFBUser(userDetails.getEmail(), userDetails.getLoginType(), userDetails.getProfile_image(),userDetails.getUsermob(),userDetails.getUserName(),userDetails.getFcm());
-            loginType = userDetails.getLoginType() ;
-        }else {
-            getLoginObservable = webServices.loginNormalUser(name, passwd, userDetails.getLoginType(),userDetails.getFcm());
-            loginType = userDetails.getLoginType() ;
-        }
+        getLoginObservable = webServices.loginUser(name, passwd,"1324532");
+
         getLoginObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getLoginDetails());
-        System.out.println(" ------- validateLoginDataBaseApi ");*/
-
-
-
+        System.out.println(" ------- validateLoginDataBaseApi ");
 
     }
 

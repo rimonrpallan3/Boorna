@@ -8,7 +8,7 @@
     <!--Set Your Application version -->
     <string name="app_version">1.0</string>
     <!-- BASE API URL (PLASE SET  LIKE THIS http://domain.com) -->
-    <string name="BASE_URL">http://10.1.1.22/boorna/</string>
+    <string name="BASE_URL">http://api.boorna.com/</string>
 
     <!-- DEFAULT HOST -->
     <string name="DEFAULT_HOST">www.apixu.com</string>

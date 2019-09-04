@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     public static String BASE_URL = AppConfig.BASE_URL;
+    public static String API_KEY = AppConfig.API_KEY;
     private static Retrofit retrofit = null;
     private static Retrofit pathRetrofit = null;
     private static OkHttpClient client = new OkHttpClient.Builder().
@@ -50,7 +51,7 @@ public class ApiClient {
                     addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
-                            Request request = chain.request().newBuilder().addHeader("parameter", "value").build();
+                            Request request = chain.request().newBuilder().addHeader("apiKey", API_KEY).build();
                             return chain.proceed(request);
                         }
                     }).

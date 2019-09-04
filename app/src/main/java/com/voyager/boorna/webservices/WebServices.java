@@ -2,6 +2,10 @@ package com.voyager.boorna.webservices;
 
 
 
+import androidx.annotation.Nullable;
+
+import com.voyager.boorna.activity.login.model.UserDetails;
+
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
@@ -15,7 +19,12 @@ public interface WebServices {
     //@GET("driver/getDriver/")
     // Call<MainClass> doGetUserList(@Query("page") String page);
     //http://10.1.1.18/sayara/user/booking/--pickup_loc: 9.731235,76.355463 -- user_id 89
-
+    @FormUrlEncoded
+    @POST("authentication/Login")
+    Observable<UserDetails> loginUser(@Nullable @Field("user_name") String userName,
+                                         @Nullable @Field("pass_word") String password,
+                                         @Nullable @Field("fcm") String fcmToken
+                                      );
 
     /*   @GET("listings/4/0")
        Call<MainList> doGetHouseList();

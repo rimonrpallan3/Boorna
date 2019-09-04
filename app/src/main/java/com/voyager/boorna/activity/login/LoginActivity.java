@@ -59,12 +59,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         etEmail =  findViewById(R.id.etEmail);
         etCPass =  findViewById(R.id.etCPass);
+        btnSignIn =  findViewById(R.id.btnSignIn);
 
         sharedPrefs = getSharedPreferences(Helper.UserDetails, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
-        loadingLayout = (FrameLayout) findViewById(R.id.loadingLayout);
+        loadingLayout = findViewById(R.id.loadingLayout);
         iLoginPresenter = new LoginPresenter(this);
-        fireBaseToken = FirebaseInstanceId.getInstance().getToken();
+        //fireBaseToken = FirebaseInstanceId.getInstance().getToken();
 
     }
 
@@ -95,15 +96,11 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void onLoginResult(Boolean result, int code) {
         iLoginPresenter.setProgressBarVisiblity(View.INVISIBLE);
-        btnSignInGoogle.setEnabled(true);
-        btnSignInFB.setEnabled(true);
         btnSignIn.setEnabled(true);
         if (result){
         }
         else {
             //Toast.makeText(this, "Please input Values, code = " + code, Toast.LENGTH_SHORT).show();
-            btnSignInGoogle.setEnabled(true);
-            btnSignInFB.setEnabled(true);
             btnSignIn.setEnabled(true);
         }
     }
