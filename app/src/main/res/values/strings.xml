@@ -1,11 +1,11 @@
 <resources>
-<!--Login Page-->
+    <!--Login Page-->
     <string name="ht_email">Email Address</string>
     <string name="ht_pass3">Password</string>
     <string name="signIn_btn">Sign In</string>
     <string name="snack_error_network">Please turn on your net.</string>
 
-<!--Helper Class-->
+    <!--Helper Class-->
     <string name="gps_network_not_enabled">Please Enable Location</string>
     <string name="open_location_settings">Location Settings</string>
     <string name="Cancel">Cancel</string>

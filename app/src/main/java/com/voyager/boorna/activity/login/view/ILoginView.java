@@ -2,6 +2,8 @@ package com.voyager.boorna.activity.login.view;
 
 
 
+import com.voyager.boorna.activity.login.model.UserDetails;
+
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -9,8 +11,8 @@ import io.reactivex.disposables.Disposable;
  */
 
 public interface ILoginView {
-    void setLoader(int visibility);
-    void onSetProgressBarVisibility(int visibility);
     void unSubscribeCalls(Disposable dMainListObservable);
     void onLoginResult(Boolean result, int code);
+    void onLoginResponse(Boolean result, int code);
+    void sendPParcelableObj(UserDetails userDetails);
 }

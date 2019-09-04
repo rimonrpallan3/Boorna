@@ -51,6 +51,7 @@ public class UserDetails implements IUserDetials, Parcelable {
     private String domain_name;
     private String logo;
     private String email;
+    private String login_status;
     private String password;
     private String fcmToken;
     private String contact_num;
@@ -75,6 +76,7 @@ public class UserDetails implements IUserDetials, Parcelable {
     private String created_date;
     private int status;
     private String user_addip;
+    private String message;
     private int user_status;
     private String user_name;
     private String user_employee_name;
@@ -93,6 +95,22 @@ public class UserDetails implements IUserDetials, Parcelable {
 
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+
+    public String getLogin_status() {
+        return login_status;
+    }
+
+    public void setLogin_status(String login_status) {
+        this.login_status = login_status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public int getFranchise_id() {
@@ -357,12 +375,14 @@ public class UserDetails implements IUserDetials, Parcelable {
         dest.writeString(this.company_name);
         dest.writeString(this.domain_name);
         dest.writeString(this.logo);
+        dest.writeString(this.message);
         dest.writeString(this.email);
         dest.writeString(this.password);
         dest.writeString(this.fcmToken);
         dest.writeString(this.contact_num);
         dest.writeString(this.inv_address);
         dest.writeString(this.inv_town);
+        dest.writeString(this.login_status);
         dest.writeInt(this.inv_country_id);
         dest.writeString(this.inv_county);
         dest.writeString(this.inv_postcode);
@@ -395,6 +415,8 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.user_id = in.readInt();
         this.company_name = in.readString();
         this.domain_name = in.readString();
+        this.login_status = in.readString();
+        this.message = in.readString();
         this.logo = in.readString();
         this.email = in.readString();
         this.password = in.readString();
@@ -445,4 +467,13 @@ public class UserDetails implements IUserDetials, Parcelable {
         }
         return 0;
     }
+
+    @Override
+    public int validateLoginResponseError(String errorMsg) {
+        if(!errorMsg.equals("success")){
+            return -2;
+        }
+        return 0;
+    }
+
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.landing.LandingActivity;
+import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.activity.login.presenter.ILoginPresenter;
 import com.voyager.boorna.activity.login.presenter.LoginPresenter;
 import com.voyager.boorna.activity.login.view.ILoginView;
+import com.voyager.boorna.activity.resetPass.PswdResetActivity;
 import com.voyager.boorna.appconfig.Helper;
 import com.voyager.boorna.appconfig.NetworkDetector;
 
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     Button btnSignIn;
     AppCompatEditText etEmail;
     AppCompatEditText etCPass;
+    AppCompatEditText tvForgotPswd;
     private static final String TAG = "SignInPage";
     ILoginPresenter iLoginPresenter;
 
@@ -60,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         etEmail =  findViewById(R.id.etEmail);
         etCPass =  findViewById(R.id.etCPass);
         btnSignIn =  findViewById(R.id.btnSignIn);
+        tvForgotPswd =  findViewById(R.id.tvForgotPswd);
 
         sharedPrefs = getSharedPreferences(Helper.UserDetails, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
@@ -73,10 +79,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         loadingLayout.setVisibility(visibility);
     }
 
-    @Override
+    /*@Override
     public void onSetProgressBarVisibility(int visibility) {
         loadingLayout.setVisibility(visibility);
-    }
+    }*/
 
 
     public void btnSignIn(View view){
@@ -85,12 +91,16 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             //Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network_available), Snackbar.LENGTH_SHORT).show();
             iLoginPresenter.setProgressBarVisiblity(View.VISIBLE);
             btnSignIn.setEnabled(false);
-            iLoginPresenter.doLogin(etEmail.getText().toString(), etCPass.getText().toString(),fireBaseToken);
+            iLoginPresenter.doLogin(etEmail.getText().toString(), etCPass.getText().toString(),fireBaseToken,editor);
         }else {
             Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network), Snackbar.LENGTH_LONG).show();
 
         }
-        iLoginPresenter.doLogin(etEmail.getText().toString(),etCPass.getText().toString(),fireBaseToken);
+    }
+
+    public void tvForgotPswd(View view){
+        Intent intent = new Intent(this, PswdResetActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -105,6 +115,20 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         }
     }
 
+    @Override
+    public void onLoginResponse(Boolean result, int code) {
+        iLoginPresenter.setProgressBarVisiblity(View.INVISIBLE);
+        btnSignIn.setEnabled(true);
+        if (result){
+            iLoginPresenter.onLoginSucuess();
+        }
+        else {
+            //Toast.makeText(this,  getResources().getString(R.string.login_error_txt), Toast.LENGTH_SHORT).show();
+            btnSignIn.setEnabled(true);
+
+        }
+    }
+
    /* @Override
     public void onSetProgressBarVisibility(int visibility) {
         loadingLayout.setVisibility(visibility);
@@ -112,9 +136,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 
 
-   /* @Override
+    @Override
     public void sendPParcelableObj(UserDetails userDetails) {
-        Intent intent = new Intent(this, LandingPage.class);
+        Intent intent = new Intent(this, LandingActivity.class);
         intent.putExtra("LoginDone", "Done");
         intent.putExtra("language", language);
         setResult(Helper.REQUEST_LOGEDIN, intent);
@@ -122,7 +146,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         startActivity(intent);
         finish();
     }
-*/
 
 
     @Override
