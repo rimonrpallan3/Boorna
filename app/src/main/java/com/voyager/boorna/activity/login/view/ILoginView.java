@@ -15,4 +15,5 @@ public interface ILoginView {
     void onLoginResult(Boolean result, int code);
     void onLoginResponse(Boolean result, int code);
     void sendPParcelableObj(UserDetails userDetails);
+    void showErrorMsg(String errorMsg);
 }

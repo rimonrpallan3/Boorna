@@ -46,7 +46,7 @@ public class LoginPresenter implements ILoginPresenter{
         this.fireBaseToken = fireBaseToken;
         this.editor = editor;
         UserDetails userDetails = new UserDetails();
-        userDetails.setFcmToken(fireBaseToken);
+        userDetails.setFcm(fireBaseToken);
         System.out.println("------- doLogin  email : "+ name +
                 " Password : " + passwd);
         initUser();
@@ -64,7 +64,7 @@ public class LoginPresenter implements ILoginPresenter{
         Retrofit retrofit = new ApiClient().getRetrofitClient();
         final WebServices webServices = retrofit.create(WebServices.class);
         Observable<UserDetails> getLoginObservable;
-        getLoginObservable = webServices.loginUser(name, passwd,"1324532");
+        getLoginObservable = webServices.loginUser(name, passwd,"45terfg");
 
         getLoginObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -86,7 +86,7 @@ public class LoginPresenter implements ILoginPresenter{
 
             @Override
             public void onNext(UserDetails value) {
-                UserDetails userDetails= value;
+                userDetails= value;
                     /*System.out.println("-------validateLoginDataBaseApi  email : " + name +
                             " Password : " + passwd +
                             " LName : " + userDetails.getFirst_name()+
@@ -113,9 +113,10 @@ public class LoginPresenter implements ILoginPresenter{
                     //System.out.println("--------- validateLoginDataBaseApi isError: "+userDetails.getLogin_status() +" Error message: "+userDetails.getLogin_status());
                    // Toast.makeText((Context) iLoginView, userDetails.getLogin_status(), Toast.LENGTH_SHORT).show();
                     Log.d("LoginPresenter", "validateLoginDataBaseApi  data unSuccess : "+userDetails.getMessage());
+                    iLoginView.showErrorMsg(userDetails.getMessage());
                 } else {
                     userDetails.setPassword(passwd);
-                    userDetails.setFcmToken(fireBaseToken);
+                    userDetails.setFcm(fireBaseToken);
                     Helper.addUserGsonInSharedPrefrences(userDetails,editor);
                     Log.d("LoginPresenter", "validateLoginDataBaseApi  data Successful : "+userDetails.getMessage());
                 }
@@ -134,6 +135,8 @@ public class LoginPresenter implements ILoginPresenter{
             }
         };
     }
+
+
 
 
 

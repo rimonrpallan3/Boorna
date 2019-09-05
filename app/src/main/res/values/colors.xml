@@ -5,6 +5,7 @@
     <color name="login_bg_color">#e1e1e1</color>
     <color name="login_stroke_color">#b7b6b4</color>
     <color name="login_btn_color">#007bff</color>
+    <color name="layout_error_color">#ff888c</color>
 
     <color name="white">#FFF</color>
     <color name="green">#00513f</color>

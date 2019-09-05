@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.landing.LandingActivity;
 import com.voyager.boorna.activity.login.model.UserDetails;
@@ -26,6 +25,7 @@ import com.voyager.boorna.appconfig.Helper;
 import com.voyager.boorna.appconfig.NetworkDetector;
 
 
+import androidx.appcompat.widget.AppCompatTextView;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -35,12 +35,11 @@ import io.reactivex.disposables.Disposable;
 public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 
-    Button btnSignInGoogle;
-    Button btnSignInFB;
     Button btnSignIn;
     AppCompatEditText etEmail;
     AppCompatEditText etCPass;
-    AppCompatEditText tvForgotPswd;
+    AppCompatTextView tvForgotPswd;
+    AppCompatTextView tvErrorMsg;
     private static final String TAG = "SignInPage";
     ILoginPresenter iLoginPresenter;
 
@@ -53,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     String language = "";
     Disposable dMainListObservable;
     String fireBaseToken="";
+    LinearLayout llErrorMsg;
 
 
     @Override
@@ -66,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         etCPass =  findViewById(R.id.etCPass);
         btnSignIn =  findViewById(R.id.btnSignIn);
         tvForgotPswd =  findViewById(R.id.tvForgotPswd);
+        llErrorMsg =  findViewById(R.id.llErrorMsg);
+        tvErrorMsg =  findViewById(R.id.tvErrorMsg);
 
         sharedPrefs = getSharedPreferences(Helper.UserDetails, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
@@ -86,8 +88,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 
     public void btnSignIn(View view){
+  /*      Intent intent = new Intent(this, LandingActivity.class);
+
+        startActivity(intent);*/
+        //finish();
         Helper.hideKeyboard(this);
         if(NetworkDetector.haveNetworkConnection(this)){
+            llErrorMsg.setVisibility(View.GONE);
             //Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network_available), Snackbar.LENGTH_SHORT).show();
             iLoginPresenter.setProgressBarVisiblity(View.VISIBLE);
             btnSignIn.setEnabled(false);
@@ -140,11 +147,20 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     public void sendPParcelableObj(UserDetails userDetails) {
         Intent intent = new Intent(this, LandingActivity.class);
         intent.putExtra("LoginDone", "Done");
-        intent.putExtra("language", language);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(userDetails);
+
+        System.out.println(" ----------- LoginPresenter sendPParcelableObj "+jsonString);
         setResult(Helper.REQUEST_LOGEDIN, intent);
         intent.putExtra("UserDetails", userDetails);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void showErrorMsg(String errorMsg) {
+        llErrorMsg.setVisibility(View.VISIBLE);
+        tvErrorMsg.setText(errorMsg);
     }
 
 

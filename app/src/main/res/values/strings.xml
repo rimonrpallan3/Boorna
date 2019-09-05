@@ -2,12 +2,28 @@
     <!--Login Page-->
     <string name="ht_email">Email Address</string>
     <string name="ht_pass3">Password</string>
-    <string name="signIn_btn">Sign In</string>
+    <string name="signIn_btn">Log In</string>
+    <string name="btn_cont">Continue</string>
+    <string name="tv_forget_pass">Forgot Password ?</string>
     <string name="snack_error_network">Please turn on your net.</string>
 
+    <!--Landing Page-->
+    <string name="storage_and_location_rationale">Please allow Permission</string>
+    <string name="loc_perm">Please grand location permission</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
+    <!--Reset Password -->
+    <string name="heading_one">Forgot Password ?</string>
+    <string name="heading_two">Enter the valid email address to reset the password</string>
+    <string name="btn_reset">Reset Password</string>
     <!--Helper Class-->
     <string name="gps_network_not_enabled">Please Enable Location</string>
     <string name="open_location_settings">Location Settings</string>
     <string name="Cancel">Cancel</string>
+    <string name="snack_error_network_available">Thanks for turning on the Network.</string>
+    <string name="snack_error_location">Please Enable Location</string>
+    <string name="snack_error_location_null">Please Enable Location And Internet</string>
 
 </resources>

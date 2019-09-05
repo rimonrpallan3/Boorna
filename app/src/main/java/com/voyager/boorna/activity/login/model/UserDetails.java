@@ -9,77 +9,95 @@ import android.os.Parcelable;
 
 public class UserDetails implements IUserDetials, Parcelable {
 
+
     /**
-     * franchise_id : 1
-     * user_id : 1
-     * company_name : Demo
-     * domain_name : demo1.boorna.com
-     * logo : 123
-     * email : demo1@boorna.com
-     * contact_num : 92333343434
+     * franchise_id :
+     * user_id : 1183
+     * company_name :
+     * domain_name :
+     * logo :
+     * email :
+     * contact_num :
      * inv_address :
      * inv_town :
-     * inv_country_id : 0
+     * inv_country_id :
      * inv_county :
      * inv_postcode :
+     * inv_person :
+     * inv_telephone :
+     * inv_email :
      * off_address :
      * off_town :
-     * off_country_id : 0
+     * off_country_id :
      * off_county :
      * off_postcode :
      * reg_number :
-     * vat_number :
-     * vat_registered : no
-     * eu_vat_registered : no
-     * currency_id : 1
-     * currency_position : prefix
-     * language_id : 3
-     * language_type : LTR
-     * franchise_addip : null
-     * created_by : null
-     * created_date : 0000-00-00 00:00:00
-     * status : 0
-     * user_addip : 178.138.32.192
+     * language_id :
+     * language_type :
+     * add_ip :
+     * add_id :
+     * add_dt :
+     * validto_date :
+     * status :
+     * user_addip :
      * user_status : 0
-     * user_name : catalin
-     * user_employee_name : Catalin Chirila
+     * user_employee_name : Dean
+     * level_code : 1130
+     * level_type : TRANSPORT DRIVER
+     * userlevelid : 5
+     * login_status : success
+     * message : You have succesfully logged in.!!
      */
 
-    private int franchise_id;
+
+
+    private String franchise_id;
     private int user_id;
     private String company_name;
     private String domain_name;
     private String logo;
     private String email;
-    private String login_status;
-    private String password;
-    private String fcmToken;
     private String contact_num;
     private String inv_address;
     private String inv_town;
-    private int inv_country_id;
+    private String inv_country_id;
     private String inv_county;
     private String inv_postcode;
+    private String inv_person;
+    private String inv_telephone;
+    private String inv_email;
     private String off_address;
     private String off_town;
-    private int off_country_id;
+    private String off_country_id;
     private String off_county;
     private String off_postcode;
     private String reg_number;
-    private String vat_number;
-    private String vat_registered;
-    private String eu_vat_registered;
-    private int currency_id;
-    private String currency_position;
-    private int language_id;
+    private String language_id;
     private String language_type;
-    private String created_date;
-    private int status;
+    private String add_ip;
+    private String add_id;
+    private String add_dt;
+    private String validto_date;
+    private String status;
     private String user_addip;
-    private String message;
+    private String fcm;
+    private String password;
     private int user_status;
-    private String user_name;
     private String user_employee_name;
+    private String level_code;
+    private String level_type;
+    private int userlevelid;
+    private String login_status;
+    private String message;
+
+
+    public String getFcm() {
+        return fcm;
+    }
+
+    public void setFcm(String fcm) {
+        this.fcm = fcm;
+    }
 
     public String getPassword() {
         return password;
@@ -89,35 +107,29 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.password = password;
     }
 
-    public String getFcmToken() {
-        return fcmToken;
+
+
+    @Override
+    public int checkUserValidity(String name, String passwd) {
+        if (email==null||passwd==null){
+            return -1;
+        }
+        return 0;
     }
 
-    public void setFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
+    @Override
+    public int validateLoginResponseError(String errorMsg) {
+        if(!errorMsg.equals("success")){
+            return -2;
+        }
+        return 0;
     }
 
-    public String getLogin_status() {
-        return login_status;
-    }
-
-    public void setLogin_status(String login_status) {
-        this.login_status = login_status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getFranchise_id() {
+    public String getFranchise_id() {
         return franchise_id;
     }
 
-    public void setFranchise_id(int franchise_id) {
+    public void setFranchise_id(String franchise_id) {
         this.franchise_id = franchise_id;
     }
 
@@ -185,11 +197,11 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.inv_town = inv_town;
     }
 
-    public int getInv_country_id() {
+    public String getInv_country_id() {
         return inv_country_id;
     }
 
-    public void setInv_country_id(int inv_country_id) {
+    public void setInv_country_id(String inv_country_id) {
         this.inv_country_id = inv_country_id;
     }
 
@@ -209,6 +221,30 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.inv_postcode = inv_postcode;
     }
 
+    public String getInv_person() {
+        return inv_person;
+    }
+
+    public void setInv_person(String inv_person) {
+        this.inv_person = inv_person;
+    }
+
+    public String getInv_telephone() {
+        return inv_telephone;
+    }
+
+    public void setInv_telephone(String inv_telephone) {
+        this.inv_telephone = inv_telephone;
+    }
+
+    public String getInv_email() {
+        return inv_email;
+    }
+
+    public void setInv_email(String inv_email) {
+        this.inv_email = inv_email;
+    }
+
     public String getOff_address() {
         return off_address;
     }
@@ -225,11 +261,11 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.off_town = off_town;
     }
 
-    public int getOff_country_id() {
+    public String getOff_country_id() {
         return off_country_id;
     }
 
-    public void setOff_country_id(int off_country_id) {
+    public void setOff_country_id(String off_country_id) {
         this.off_country_id = off_country_id;
     }
 
@@ -257,51 +293,11 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.reg_number = reg_number;
     }
 
-    public String getVat_number() {
-        return vat_number;
-    }
-
-    public void setVat_number(String vat_number) {
-        this.vat_number = vat_number;
-    }
-
-    public String getVat_registered() {
-        return vat_registered;
-    }
-
-    public void setVat_registered(String vat_registered) {
-        this.vat_registered = vat_registered;
-    }
-
-    public String getEu_vat_registered() {
-        return eu_vat_registered;
-    }
-
-    public void setEu_vat_registered(String eu_vat_registered) {
-        this.eu_vat_registered = eu_vat_registered;
-    }
-
-    public int getCurrency_id() {
-        return currency_id;
-    }
-
-    public void setCurrency_id(int currency_id) {
-        this.currency_id = currency_id;
-    }
-
-    public String getCurrency_position() {
-        return currency_position;
-    }
-
-    public void setCurrency_position(String currency_position) {
-        this.currency_position = currency_position;
-    }
-
-    public int getLanguage_id() {
+    public String getLanguage_id() {
         return language_id;
     }
 
-    public void setLanguage_id(int language_id) {
+    public void setLanguage_id(String language_id) {
         this.language_id = language_id;
     }
 
@@ -313,20 +309,43 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.language_type = language_type;
     }
 
-
-    public String getCreated_date() {
-        return created_date;
+    public String getAdd_ip() {
+        return add_ip;
     }
 
-    public void setCreated_date(String created_date) {
-        this.created_date = created_date;
+    public void setAdd_ip(String add_ip) {
+        this.add_ip = add_ip;
     }
 
-    public int getStatus() {
+    public String getAdd_id() {
+        return add_id;
+    }
+
+    public void setAdd_id(String add_id) {
+        this.add_id = add_id;
+    }
+
+    public String getAdd_dt() {
+        return add_dt;
+    }
+
+    public void setAdd_dt(String add_dt) {
+        this.add_dt = add_dt;
+    }
+
+    public String getValidto_date() {
+        return validto_date;
+    }
+
+    public void setValidto_date(String validto_date) {
+        this.validto_date = validto_date;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -346,14 +365,6 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.user_status = user_status;
     }
 
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
-
     public String getUser_employee_name() {
         return user_employee_name;
     }
@@ -362,6 +373,45 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.user_employee_name = user_employee_name;
     }
 
+    public String getLevel_code() {
+        return level_code;
+    }
+
+    public void setLevel_code(String level_code) {
+        this.level_code = level_code;
+    }
+
+    public String getLevel_type() {
+        return level_type;
+    }
+
+    public void setLevel_type(String level_type) {
+        this.level_type = level_type;
+    }
+
+    public int getUserlevelid() {
+        return userlevelid;
+    }
+
+    public void setUserlevelid(int userlevelid) {
+        this.userlevelid = userlevelid;
+    }
+
+    public String getLogin_status() {
+        return login_status;
+    }
+
+    public void setLogin_status(String login_status) {
+        this.login_status = login_status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     @Override
     public int describeContents() {
@@ -370,85 +420,91 @@ public class UserDetails implements IUserDetials, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.franchise_id);
+        dest.writeString(this.franchise_id);
         dest.writeInt(this.user_id);
         dest.writeString(this.company_name);
         dest.writeString(this.domain_name);
         dest.writeString(this.logo);
-        dest.writeString(this.message);
         dest.writeString(this.email);
-        dest.writeString(this.password);
-        dest.writeString(this.fcmToken);
         dest.writeString(this.contact_num);
         dest.writeString(this.inv_address);
         dest.writeString(this.inv_town);
-        dest.writeString(this.login_status);
-        dest.writeInt(this.inv_country_id);
+        dest.writeString(this.inv_country_id);
         dest.writeString(this.inv_county);
         dest.writeString(this.inv_postcode);
+        dest.writeString(this.inv_person);
+        dest.writeString(this.inv_telephone);
+        dest.writeString(this.inv_email);
         dest.writeString(this.off_address);
         dest.writeString(this.off_town);
-        dest.writeInt(this.off_country_id);
+        dest.writeString(this.off_country_id);
         dest.writeString(this.off_county);
         dest.writeString(this.off_postcode);
         dest.writeString(this.reg_number);
-        dest.writeString(this.vat_number);
-        dest.writeString(this.vat_registered);
-        dest.writeString(this.eu_vat_registered);
-        dest.writeInt(this.currency_id);
-        dest.writeString(this.currency_position);
-        dest.writeInt(this.language_id);
+        dest.writeString(this.language_id);
         dest.writeString(this.language_type);
-        dest.writeString(this.created_date);
-        dest.writeInt(this.status);
+        dest.writeString(this.add_ip);
+        dest.writeString(this.add_id);
+        dest.writeString(this.add_dt);
+        dest.writeString(this.validto_date);
+        dest.writeString(this.status);
         dest.writeString(this.user_addip);
+        dest.writeString(this.fcm);
+        dest.writeString(this.password);
         dest.writeInt(this.user_status);
-        dest.writeString(this.user_name);
         dest.writeString(this.user_employee_name);
+        dest.writeString(this.level_code);
+        dest.writeString(this.level_type);
+        dest.writeInt(this.userlevelid);
+        dest.writeString(this.login_status);
+        dest.writeString(this.message);
     }
 
     public UserDetails() {
     }
 
     protected UserDetails(Parcel in) {
-        this.franchise_id = in.readInt();
+        this.franchise_id = in.readString();
         this.user_id = in.readInt();
         this.company_name = in.readString();
         this.domain_name = in.readString();
-        this.login_status = in.readString();
-        this.message = in.readString();
         this.logo = in.readString();
         this.email = in.readString();
-        this.password = in.readString();
-        this.fcmToken = in.readString();
         this.contact_num = in.readString();
         this.inv_address = in.readString();
         this.inv_town = in.readString();
-        this.inv_country_id = in.readInt();
+        this.inv_country_id = in.readString();
         this.inv_county = in.readString();
         this.inv_postcode = in.readString();
+        this.inv_person = in.readString();
+        this.inv_telephone = in.readString();
+        this.inv_email = in.readString();
         this.off_address = in.readString();
         this.off_town = in.readString();
-        this.off_country_id = in.readInt();
+        this.off_country_id = in.readString();
         this.off_county = in.readString();
         this.off_postcode = in.readString();
         this.reg_number = in.readString();
-        this.vat_number = in.readString();
-        this.vat_registered = in.readString();
-        this.eu_vat_registered = in.readString();
-        this.currency_id = in.readInt();
-        this.currency_position = in.readString();
-        this.language_id = in.readInt();
+        this.language_id = in.readString();
         this.language_type = in.readString();
-        this.created_date = in.readString();
-        this.status = in.readInt();
+        this.add_ip = in.readString();
+        this.add_id = in.readString();
+        this.add_dt = in.readString();
+        this.validto_date = in.readString();
+        this.status = in.readString();
         this.user_addip = in.readString();
+        this.fcm = in.readString();
+        this.password = in.readString();
         this.user_status = in.readInt();
-        this.user_name = in.readString();
         this.user_employee_name = in.readString();
+        this.level_code = in.readString();
+        this.level_type = in.readString();
+        this.userlevelid = in.readInt();
+        this.login_status = in.readString();
+        this.message = in.readString();
     }
 
-    public static final Parcelable.Creator<UserDetails> CREATOR = new Parcelable.Creator<UserDetails>() {
+    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
         @Override
         public UserDetails createFromParcel(Parcel source) {
             return new UserDetails(source);
@@ -459,21 +515,4 @@ public class UserDetails implements IUserDetials, Parcelable {
             return new UserDetails[size];
         }
     };
-
-    @Override
-    public int checkUserValidity(String name, String passwd) {
-        if (email==null||passwd==null||!email.equals(getEmail())||!passwd.equals(getPassword())){
-            return -1;
-        }
-        return 0;
-    }
-
-    @Override
-    public int validateLoginResponseError(String errorMsg) {
-        if(!errorMsg.equals("success")){
-            return -2;
-        }
-        return 0;
-    }
-
 }

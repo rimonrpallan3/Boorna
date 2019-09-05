@@ -37,7 +37,7 @@
                 android:layout_marginTop="@dimen/_10"
                 android:drawableLeft="@drawable/avatar"
                 android:drawablePadding="@dimen/_08"
-                android:background="@drawable/box_edittext"
+                android:background="@drawable/box_edit_text"
                 android:lines="1"
                 android:padding="@dimen/_10"
                 app:backgroundTint="@color/edt_txt_underline" />
@@ -54,10 +54,11 @@
                     android:layout_marginLeft="@dimen/_15"
                     android:layout_marginRight="@dimen/_15"
                     android:layout_marginTop="@dimen/_15"
+                    android:inputType="textVisiblePassword"
                     android:drawableLeft="@drawable/key"
                     android:drawablePadding="@dimen/_08"
                     android:hint="@string/ht_pass3"
-                    android:background="@drawable/box_edittext"
+                    android:background="@drawable/box_edit_text"
                     android:lines="1"
                     android:padding="@dimen/_10"
                     app:backgroundTint="@color/edt_txt_underline" />
@@ -66,6 +67,11 @@
 
 
             </FrameLayout>
+
+            <include
+                layout="@layout/error_layout"
+                android:id="@+id/llErrorMsg"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnSignIn"
@@ -76,10 +82,10 @@
                 android:layout_marginTop="@dimen/_10"
                 android:background="@drawable/rectangle_button"
                 android:onClick="btnSignIn"
-                android:text="@string/signIn_btn"
+                android:text="@string/btn_cont"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12" />
+                android:textSize="@dimen/_20" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvForgotPswd"
@@ -90,7 +96,8 @@
                 android:layout_marginTop="@dimen/_10"
                 android:onClick="tvForgotPswd"
                 android:gravity="right"
-                android:text="Forgot ?"
+                android:textStyle="bold"
+                android:text="@string/tv_forget_pass"
                 android:textSize="@dimen/_16" />
 
 

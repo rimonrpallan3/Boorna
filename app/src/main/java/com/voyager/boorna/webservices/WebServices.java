@@ -5,10 +5,13 @@ package com.voyager.boorna.webservices;
 import androidx.annotation.Nullable;
 
 import com.voyager.boorna.activity.login.model.UserDetails;
+import com.voyager.boorna.services.model.DriverDetails;
+import com.voyager.boorna.services.model.DriverLocDetails;
 
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -21,10 +24,17 @@ public interface WebServices {
     //http://10.1.1.18/sayara/user/booking/--pickup_loc: 9.731235,76.355463 -- user_id 89
     @FormUrlEncoded
     @POST("authentication/Login")
-    Observable<UserDetails> loginUser(@Nullable @Field("user_name") String userName,
+    Observable<UserDetails> loginUser(@Nullable @Field("user_email") String userName,
                                          @Nullable @Field("pass_word") String password,
                                          @Nullable @Field("fcm") String fcmToken
                                       );
+    @FormUrlEncoded
+    @POST("driverLocationSave")
+    Call<ArrayList<DriverDetails>> driverProfileStatus(@Nullable @Field("driver_id") int driverID,
+                                                  @Nullable @Field("level_code") String level_code,
+                                                  @Nullable @Field("lat") double driverLatitude,
+                                                  @Nullable @Field("long") double driverLongitude,
+                                                  @Nullable @Field("datetime") String dateTime);
 
     /*   @GET("listings/4/0")
        Call<MainList> doGetHouseList();
