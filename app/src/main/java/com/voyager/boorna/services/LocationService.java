@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.core.app.ActivityCompat;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +87,7 @@ public class LocationService extends Service implements LocationListener {
             System.out.println(dateToStr);
 
             Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(driverId,driverUserModel.getLevel_code(),location.getLongitude(), location.getLatitude(),dateToStr);
+            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(driverUserModel.getUser_id(),driverUserModel.getLevel_code(),location.getLatitude(), location.getLongitude(),dateToStr);
             call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                 @Override
                 public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {

@@ -37,6 +37,18 @@
             </intent-filter>
         </activity>
 
+
+        <service
+            android:name=".activity.landing.services.LocationUpdatesIntentService"
+            android:exported="false" />
+
+        <receiver android:name=".activity.landing.services.LocationUpdatesBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.sample.backgroundlocationupdates.LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".services.LocationService"
             android:enabled="true"
