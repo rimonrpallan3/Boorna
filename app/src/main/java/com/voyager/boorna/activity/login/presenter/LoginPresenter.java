@@ -64,7 +64,7 @@ public class LoginPresenter implements ILoginPresenter{
         Retrofit retrofit = new ApiClient().getRetrofitClient();
         final WebServices webServices = retrofit.create(WebServices.class);
         Observable<UserDetails> getLoginObservable;
-        getLoginObservable = webServices.loginUser(name, passwd,"45terfg");
+        getLoginObservable = webServices.loginUser(name, passwd,fireBaseToken);
 
         getLoginObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -73,6 +73,7 @@ public class LoginPresenter implements ILoginPresenter{
 
 
     }
+
 
 
     private Observer<UserDetails> getLoginDetails() {

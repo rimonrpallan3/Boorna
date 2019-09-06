@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.voyager.boorna.activity.landing.helper;
+package com.voyager.boorna.activity.landing;
 
 import android.content.Context;
 import android.preference.PreferenceManager;

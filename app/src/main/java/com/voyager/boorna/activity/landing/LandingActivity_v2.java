@@ -27,9 +27,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
 import com.voyager.boorna.BuildConfig;
 import com.voyager.boorna.R;
-import com.voyager.boorna.activity.landing.helper.LocationRequestHelper;
-import com.voyager.boorna.activity.landing.helper.LocationResultHelper;
-import com.voyager.boorna.activity.landing.services.LocationUpdatesBroadcastReceiver;
 
 public class LandingActivity_v2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -41,14 +38,14 @@ public class LandingActivity_v2 extends AppCompatActivity implements GoogleApiCl
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-// FIXME: 5/16/17
+    // FIXME: 5/16/17
     private static final long UPDATE_INTERVAL = 10 * 1000;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
      * than this value, but they may be less frequent.
      */
-// FIXME: 5/14/17
+    // FIXME: 5/14/17
     private static final long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL / 2;
 
     /**
@@ -103,6 +100,7 @@ public class LandingActivity_v2 extends AppCompatActivity implements GoogleApiCl
         super.onResume();
         updateButtonsState(LocationRequestHelper.getRequesting(this));
         mLocationUpdatesResultView.setText(LocationResultHelper.getSavedLocationResult(this));
+        System.out.println("Location onResume "+LocationResultHelper.getSavedLocationResult(this));
     }
 
     @Override
@@ -293,6 +291,7 @@ public class LandingActivity_v2 extends AppCompatActivity implements GoogleApiCl
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(LocationResultHelper.KEY_LOCATION_UPDATES_RESULT)) {
             mLocationUpdatesResultView.setText(LocationResultHelper.getSavedLocationResult(this));
+            System.out.println("Location onSharedPreferenceChanged "+LocationResultHelper.getSavedLocationResult(this));
         } else if (s.equals(LocationRequestHelper.KEY_LOCATION_UPDATES_REQUESTED)) {
             updateButtonsState(LocationRequestHelper.getRequesting(this));
         }

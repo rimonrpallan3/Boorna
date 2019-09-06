@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright 2017 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,57 +13,65 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.voyager.boorna.activity.landing;
 
-package com.voyager.boorna.activity.landing.services;
-
-import android.content.BroadcastReceiver;
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationResult;
-import com.voyager.boorna.activity.landing.helper.LocationResultHelper;
 
 import java.util.List;
 
 /**
- * Receiver for handling location updates.
+ * Handles incoming location updates and displays a notification with the location data.
  *
- * For apps targeting API level O
- * {@link android.app.PendingIntent#getBroadcast(Context, int, Intent, int)} should be used when
- * requesting location updates. Due to limits on background services,
- * {@link android.app.PendingIntent#getService(Context, int, Intent, int)} should not be used.
+ * For apps targeting API level 25 ("Nougat") or lower, location updates may be requested
+ * using {@link android.app.PendingIntent#getService(Context, int, Intent, int)} or
+ * {@link android.app.PendingIntent#getBroadcast(Context, int, Intent, int)}. For apps targeting
+ * API level O, only {@code getBroadcast} should be used.
  *
  *  Note: Apps running on "O" devices (regardless of targetSdkVersion) may receive updates
  *  less frequently than the interval specified in the
  *  {@link com.google.android.gms.location.LocationRequest} when the app is no longer in the
  *  foreground.
  */
-public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = "LUBroadcastReceiver";
+public class LocationUpdatesIntentService extends IntentService {
 
     static final String ACTION_PROCESS_UPDATES =
-            "com.voyager.boorna.activity.landing.services.action" +
+            "com.voyager.boorna.activity.landing.action" +
                     ".PROCESS_UPDATES";
+    private static final String TAG = LocationUpdatesIntentService.class.getSimpleName();
+
+
+    public LocationUpdatesIntentService() {
+        // Name the worker thread.
+        super(TAG);
+    }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_PROCESS_UPDATES.equals(action)) {
                 LocationResult result = LocationResult.extractResult(intent);
                 if (result != null) {
                     List<Location> locations = result.getLocations();
-                    LocationResultHelper locationResultHelper = new LocationResultHelper(
-                            context, locations);
+                    for (Location location : locations) {
+                        System.out.println("onHandleIntent getLongitude"+location.getLatitude()+"onHandleIntent getLongitude"+location.getLongitude());
+                    }
+                    LocationResultHelper locationResultHelper = new LocationResultHelper(this,
+                            locations);
                     // Save the location data to SharedPreferences.
                     locationResultHelper.saveResults();
                     // Show notification with the location data.
                     locationResultHelper.showNotification();
-                    Log.i(TAG, LocationResultHelper.getSavedLocationResult(context));
+                    Log.i(TAG, LocationResultHelper.getSavedLocationResult(this));
                 }
             }
         }
     }
 }
+

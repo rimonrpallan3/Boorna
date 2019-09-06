@@ -73,3 +73,4 @@ dependencies {
     // FastAndroidNetworking Dependency
     implementation 'com.amitshekhar.android:rx2-android-networking:1.0.2'
 }
+apply plugin: 'com.google.gms.google-services'

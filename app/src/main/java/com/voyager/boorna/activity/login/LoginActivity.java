@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -13,9 +14,11 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.landing.LandingActivity;
+import com.voyager.boorna.activity.landing.LandingActivity_v2;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.activity.login.presenter.ILoginPresenter;
 import com.voyager.boorna.activity.login.presenter.LoginPresenter;
@@ -25,8 +28,14 @@ import com.voyager.boorna.appconfig.Helper;
 import com.voyager.boorna.appconfig.NetworkDetector;
 
 
+import java.util.concurrent.TimeUnit;
+
 import androidx.appcompat.widget.AppCompatTextView;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by User on 23-Jan-19.
@@ -53,6 +62,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     Disposable dMainListObservable;
     String fireBaseToken="";
     LinearLayout llErrorMsg;
+    String value="";
+    UserDetails userDetails;
+    private int SPLASH_DISPLAY_LENGTH = 2;
 
 
     @Override
@@ -71,11 +83,27 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         sharedPrefs = getSharedPreferences(Helper.UserDetails, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
+        value =getUserGsonInSharedPrefrences();
+        if (value != null && value.length() > 0) {
+            intent = new Intent(getApplicationContext(), LandingActivity.class);
+            intent.putExtra("UserDetails", userDetails);
+            startActivity(intent);
+            finish();
+        } else {
+            Log.d("LoginActivity", "No value present  : ");
+        }
+
+
+
         loadingLayout = findViewById(R.id.loadingLayout);
         iLoginPresenter = new LoginPresenter(this);
-        //fireBaseToken = FirebaseInstanceId.getInstance().getToken();
+        fireBaseToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("SplashPresenter", "fireBaseToken  : " +fireBaseToken);
 
     }
+
+
+
 
     public void setLoader(int visibility){
         loadingLayout.setVisibility(visibility);
@@ -88,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 
     public void btnSignIn(View view){
-  /*      Intent intent = new Intent(this, LandingActivity.class);
+        /*Intent intent = new Intent(this, LandingActivity.class);
 
         startActivity(intent);*/
         //finish();
@@ -104,6 +132,23 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         }
     }
+
+    public String getUserGsonInSharedPrefrences(){
+        String emailAddress ="";
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("UserDetails", null);
+        if(json!=null){
+             userDetails = gson.fromJson(json, UserDetails.class);
+            if(userDetails.getEmail()!=null) {
+                emailAddress = userDetails.getUser_email();
+            }else {
+                emailAddress = "";
+            }
+            System.out.println("--------- SplashPresenter getUserGsonInSharedPrefrences"+json);
+        }
+        return emailAddress;
+    }
+
 
     public void tvForgotPswd(View view){
         Intent intent = new Intent(this, PswdResetActivity.class);

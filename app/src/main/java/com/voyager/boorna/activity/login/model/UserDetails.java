@@ -51,6 +51,8 @@ public class UserDetails implements IUserDetials, Parcelable {
 
 
 
+
+
     private String franchise_id;
     private int user_id;
     private String company_name;
@@ -89,6 +91,13 @@ public class UserDetails implements IUserDetials, Parcelable {
     private int userlevelid;
     private String login_status;
     private String message;
+    /**
+     * vehicle_id : 5889
+     * user_email : driver2@boorna.com
+     */
+
+    private int vehicle_id;
+    private String user_email;
 
 
     public String getFcm() {
@@ -515,4 +524,20 @@ public class UserDetails implements IUserDetials, Parcelable {
             return new UserDetails[size];
         }
     };
+
+    public int getVehicle_id() {
+        return vehicle_id;
+    }
+
+    public void setVehicle_id(int vehicle_id) {
+        this.vehicle_id = vehicle_id;
+    }
+
+    public String getUser_email() {
+        return user_email;
+    }
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
 }

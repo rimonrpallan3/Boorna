@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -23,9 +25,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import androidx.recyclerview.widget.RecyclerView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
@@ -36,8 +40,10 @@ import retrofit2.Retrofit;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +52,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.landing.presenter.ILandingPresenter;
+import com.voyager.boorna.activity.landing.presenter.LandingPresenter;
+import com.voyager.boorna.activity.landing.view.ILandingView;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.appconfig.Helper;
 import com.voyager.boorna.appconfig.NetworkDetector;
@@ -63,7 +72,8 @@ import java.util.List;
 public class LandingActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        ILandingView {
 
 
     String[] perms2 = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -85,6 +95,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
     SharedPreferences.Editor editor;
     int userID = 0;
     String getLevel_code = "";
+    int vehicleId = 0;
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private LocationManager mLocationManager;
@@ -93,8 +104,14 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
     private com.google.android.gms.location.LocationListener listener;
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 100;
+    private Toolbar mTopToolbar;
+
+    ILandingPresenter iLandingPresenter;
+    RecyclerView rvLandingMainList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,24 +119,29 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
         setContentView(R.layout.activity_landing);
         Intent intent = getIntent();
         bundle = new Bundle();
+        mTopToolbar = findViewById(R.id.my_toolbar);
+        rvLandingMainList = findViewById(R.id.rvLandingMainList);
+        setSupportActionBar(mTopToolbar);
 
+        iLandingPresenter = new LandingPresenter(this);
         sharedPrefs = getSharedPreferences(Helper.UserDetails,
                 Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
-        String hiddenBtn = intent.getStringExtra("btnHiddenBtn");
+        userDetails = new UserDetails();
         userDetails = (UserDetails) intent.getParcelableExtra("UserDetails");
         if (userDetails != null) {
             userID = userDetails.getUser_id();
             getLevel_code = userDetails.getLevel_code();
+            vehicleId = userDetails.getVehicle_id();
             System.out.println("LandingPage -- UserDetail- name : " + userDetails.getEmail());
             System.out.println("LandingPage -- UserDetail- Id : " + userDetails.getUser_id());
             System.out.println("LandingPage -- UserDetail- Id : " + userDetails.getLevel_code());
             System.out.println("LandingPage -- UserDetail- fcm : " + userDetails.getFcm());
+            System.out.println("LandingPage -- UserDetail- vehicleId : " + userDetails.getVehicle_id());
         } else {
             userDetails = getUserSDetails();
         }
 
-        userDetails = new UserDetails();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // methodRequiresTwoPermission();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -140,8 +162,50 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
         // Here, thisActivity is the current activity
 
         checkPermissions();
+        methodRequiresTwoPermission();
+
+      /*  locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(20 * 1000);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
+                        System.out.println(" getLatitude " + location.getLatitude() + " getLongitude " + location.getLongitude());
+                    }
+                }
+            }
+        };*/
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_favorite) {
+            Toast.makeText(this, "Action clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private UserDetails getUserSDetails() {
@@ -194,7 +258,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
                                 webServices = retrofit.create(WebServices.class);
 
                                 Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
+                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
                                 call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
@@ -275,6 +339,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onStart() {
         super.onStart();
@@ -285,9 +350,8 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
         if (!checkPermissions()) {
             requestPermissions();
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getLastLocation();
-            }
+            getLastLocation();
+
         }
     }
 
@@ -330,7 +394,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
                                 webServices = retrofit.create(WebServices.class);
 
                                 Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
+                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
                                 call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
@@ -391,7 +455,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
                             webServices = retrofit.create(WebServices.class);
 
                             Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
+                            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
                             call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
@@ -433,7 +497,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
         webServices = retrofit.create(WebServices.class);
 
         Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
+        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
         call.enqueue(new Callback<ArrayList<DriverDetails>>() {
             @Override
             public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
@@ -590,7 +654,7 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
                                         webServices = retrofit.create(WebServices.class);
 
                                         Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
+                                        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
                                         call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                                             @Override
                                             public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {

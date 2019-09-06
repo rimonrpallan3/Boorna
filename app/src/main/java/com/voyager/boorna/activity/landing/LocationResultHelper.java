@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.voyager.boorna.activity.landing.helper;
+package com.voyager.boorna.activity.landing;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -28,8 +28,10 @@ import android.location.Location;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.landing.LandingActivity;
+import com.voyager.boorna.activity.login.model.UserDetails;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -63,6 +65,9 @@ class LocationResultHelper {
 
     }
 
+
+
+
     /**
      * Returns the title for reporting about a list of {@link Location} objects.
      */
@@ -78,6 +83,7 @@ class LocationResultHelper {
         }
         StringBuilder sb = new StringBuilder();
         for (Location location : mLocations) {
+            System.out.println("getLongitude"+location.getLatitude()+"getLongitude"+location.getLongitude());
             sb.append("(");
             sb.append(location.getLatitude());
             sb.append(", ");

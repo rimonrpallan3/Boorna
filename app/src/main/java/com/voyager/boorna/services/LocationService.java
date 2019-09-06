@@ -87,7 +87,7 @@ public class LocationService extends Service implements LocationListener {
             System.out.println(dateToStr);
 
             Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(driverUserModel.getUser_id(),driverUserModel.getLevel_code(),location.getLatitude(), location.getLongitude(),dateToStr);
+            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(driverUserModel.getUser_id(),driverUserModel.getVehicle_id(),driverUserModel.getLevel_code(),location.getLatitude(), location.getLongitude(),dateToStr);
             call.enqueue(new Callback<ArrayList<DriverDetails>>() {
                 @Override
                 public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {

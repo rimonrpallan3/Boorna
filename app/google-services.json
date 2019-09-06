@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "965349396204",
+    "firebase_url": "https://boorna-test.firebaseio.com",
+    "project_id": "boorna-test",
+    "storage_bucket": "boorna-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965349396204:android:6dd6736efa34b1fabf1fc9",
+        "android_client_info": {
+          "package_name": "com.voyager.boorna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "965349396204-g6dauks4c3uim109e56e9tu03lk8jof1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdr9nOp2NZqX3j9AbBGf-xipMNrVzhBak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "965349396204-g6dauks4c3uim109e56e9tu03lk8jof1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,6 +29,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.landing.LandingActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.landing.LandingActivity_v2"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,10 +41,14 @@
 
 
         <service
-            android:name=".activity.landing.services.LocationUpdatesIntentService"
+            android:name=".activity.landing.LocationUpdatesIntentService"
+            android:exported="false" />
+        <service
+            android:name=".activity.landing.LocationUpdatesIntentService"
             android:exported="false" />
 
-        <receiver android:name=".activity.landing.services.LocationUpdatesBroadcastReceiver"
+
+        <receiver android:name=".activity.landing.LocationUpdatesBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.location.sample.backgroundlocationupdates.LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES" />
