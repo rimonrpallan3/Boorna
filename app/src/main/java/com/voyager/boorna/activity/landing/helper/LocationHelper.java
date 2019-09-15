@@ -195,7 +195,7 @@ public class LocationHelper {
                 .apply();
     }
 
-    static boolean getRequesting(Context context) {
+    public static boolean getRequesting(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(KEY_LOCATION_UPDATES_REQUESTED, false);
     }

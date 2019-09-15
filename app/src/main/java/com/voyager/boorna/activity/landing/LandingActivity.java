@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,7 +43,7 @@ import static com.voyager.boorna.activity.landing.helper.LocationHelper.REQUEST_
 import static com.voyager.boorna.activity.landing.helper.LocationHelper.checkPermissions;
 
 
-public class LandingActivity extends AppCompatActivity implements ILandingView {
+public class LandingActivity extends AppCompatActivity implements ILandingView ,SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String TAG = LandingActivity.class.getSimpleName();
     UserDetails userDetails;
@@ -138,6 +139,45 @@ public class LandingActivity extends AppCompatActivity implements ILandingView {
 
     }
 
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Ensures that only one button is enabled at any time. The Start Updates button is enabled
+     * if the user is not requesting location updates. The Stop Updates button is enabled if the
+     * user is requesting location updates.
+     */
+    private void updateButtonsState(boolean requestingLocationUpdates) {
+        if (requestingLocationUpdates) {
+            //mRequestUpdatesButton.setEnabled(false);
+            //mRemoveUpdatesButton.setEnabled(true);
+        } else {
+            //mRequestUpdatesButton.setEnabled(true);
+            //mRemoveUpdatesButton.setEnabled(false);
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateButtonsState(LocationHelper.getRequesting(this));
+        //mLocationUpdatesResultView.setText(LocationHelper.getSavedLocationResult(this));
+    }
+
+    @Override
+    protected void onStop() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onStop();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -210,6 +250,15 @@ public class LandingActivity extends AppCompatActivity implements ILandingView {
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Handles the Remove Updates button, and requests removal of location updates.
+     */
+    public void removeLocationUpdates(View view) {
+        Log.i(TAG, "Removing location updates");
+        LocationHelper.setRequesting(this, false);
+        LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(getPendingIntent());
+    }
+
 
     /**
      * Handles the Request Updates button and requests start of location updates.
@@ -218,8 +267,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView {
         try {
             Log.i(TAG, "Starting location updates");
             LocationHelper.setRequesting(this, true);
-            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(
-                    mLocationRequest, getPendingIntent());
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, getPendingIntent());
         } catch (SecurityException e) {
             LocationHelper.setRequesting(this, false);
             e.printStackTrace();
@@ -228,14 +276,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView {
 
 
 
-    /**
-     * Handles the Remove Updates button, and requests removal of location updates.
-     */
-    public void removeLocationUpdates(View view) {
-        Log.i(TAG, "Removing location updates");
-        LocationHelper.setRequesting(this, false);
-        LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
-    }
+
 
     /**
      * Callback received when a permissions request has been completed.
@@ -290,7 +331,12 @@ public class LandingActivity extends AppCompatActivity implements ILandingView {
     }
 
 
-
-
-
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s.equals(LocationHelper.KEY_LOCATION_UPDATES_RESULT)) {
+            //mLocationUpdatesResultView.setText(LocationHelper.getSavedLocationResult(this));
+        } else if (s.equals(LocationHelper.KEY_LOCATION_UPDATES_REQUESTED)) {
+            updateButtonsState(LocationHelper.getRequesting(this));
+        }
+    }
 }

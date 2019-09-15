@@ -76,7 +76,7 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
             if (ACTION_PROCESS_UPDATES.equals(action)) {
                 LocationResult result = LocationResult.extractResult(intent);
                 if (result != null) {
-                    userDetails = new UserDetails();
+
                     userID = LocationUpdatesBroadcastReceiver.userID;
                     getLevel_code = LocationUpdatesBroadcastReceiver.getLevel_code ;
                     vehicleId = LocationUpdatesBroadcastReceiver.vehicleId ;
