@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.norbsoft.typefacehelper:library:0.9.0'
     implementation 'net.steamcrafted:materialiconlib:1.1.4'
     implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
+
     //New Firebase
     implementation 'com.google.firebase:firebase-appindexing:11.8.0'
     implementation 'com.google.firebase:firebase-core:11.8.0'

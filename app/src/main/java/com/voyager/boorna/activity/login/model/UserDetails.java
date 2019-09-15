@@ -91,6 +91,7 @@ public class UserDetails implements IUserDetials, Parcelable {
     private int userlevelid;
     private String login_status;
     private String message;
+
     /**
      * vehicle_id : 5889
      * user_email : driver2@boorna.com
@@ -98,6 +99,19 @@ public class UserDetails implements IUserDetials, Parcelable {
 
     private int vehicle_id;
     private String user_email;
+    /**
+     * homepage_picture :
+     * scripts_ganalytics :
+     * scripts_facepixel :
+     * scripts_tawk :
+     * boorna_vatrate_applied :
+     */
+
+    private String homepage_picture;
+    private String scripts_ganalytics;
+    private String scripts_facepixel;
+    private String scripts_tawk;
+    private String boorna_vatrate_applied;
 
 
     public String getFcm() {
@@ -422,6 +436,30 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.message = message;
     }
 
+
+
+    public UserDetails() {
+    }
+
+
+
+    public int getVehicle_id() {
+        return vehicle_id;
+    }
+
+    public void setVehicle_id(int vehicle_id) {
+        this.vehicle_id = vehicle_id;
+    }
+
+    public String getUser_email() {
+        return user_email;
+    }
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -467,9 +505,8 @@ public class UserDetails implements IUserDetials, Parcelable {
         dest.writeInt(this.userlevelid);
         dest.writeString(this.login_status);
         dest.writeString(this.message);
-    }
-
-    public UserDetails() {
+        dest.writeInt(this.vehicle_id);
+        dest.writeString(this.user_email);
     }
 
     protected UserDetails(Parcel in) {
@@ -511,6 +548,8 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.userlevelid = in.readInt();
         this.login_status = in.readString();
         this.message = in.readString();
+        this.vehicle_id = in.readInt();
+        this.user_email = in.readString();
     }
 
     public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
@@ -525,19 +564,43 @@ public class UserDetails implements IUserDetials, Parcelable {
         }
     };
 
-    public int getVehicle_id() {
-        return vehicle_id;
+    public String getHomepage_picture() {
+        return homepage_picture;
     }
 
-    public void setVehicle_id(int vehicle_id) {
-        this.vehicle_id = vehicle_id;
+    public void setHomepage_picture(String homepage_picture) {
+        this.homepage_picture = homepage_picture;
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getScripts_ganalytics() {
+        return scripts_ganalytics;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setScripts_ganalytics(String scripts_ganalytics) {
+        this.scripts_ganalytics = scripts_ganalytics;
+    }
+
+    public String getScripts_facepixel() {
+        return scripts_facepixel;
+    }
+
+    public void setScripts_facepixel(String scripts_facepixel) {
+        this.scripts_facepixel = scripts_facepixel;
+    }
+
+    public String getScripts_tawk() {
+        return scripts_tawk;
+    }
+
+    public void setScripts_tawk(String scripts_tawk) {
+        this.scripts_tawk = scripts_tawk;
+    }
+
+    public String getBoorna_vatrate_applied() {
+        return boorna_vatrate_applied;
+    }
+
+    public void setBoorna_vatrate_applied(String boorna_vatrate_applied) {
+        this.boorna_vatrate_applied = boorna_vatrate_applied;
     }
 }

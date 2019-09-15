@@ -45,11 +45,11 @@ public class LoginPresenter implements ILoginPresenter{
         this.passwd = passwd;
         this.fireBaseToken = fireBaseToken;
         this.editor = editor;
+        initUser();
         UserDetails userDetails = new UserDetails();
         userDetails.setFcm(fireBaseToken);
         System.out.println("------- doLogin  email : "+ name +
-                " Password : " + passwd);
-        initUser();
+                " Password : " + passwd+", fireBaseToken : "+fireBaseToken);
         Boolean isLoginSuccess = true;
         final int code = userDetails.checkUserValidity(name,passwd);
         if (code!=0) isLoginSuccess = false;
@@ -64,6 +64,10 @@ public class LoginPresenter implements ILoginPresenter{
         Retrofit retrofit = new ApiClient().getRetrofitClient();
         final WebServices webServices = retrofit.create(WebServices.class);
         Observable<UserDetails> getLoginObservable;
+
+        if(userDetails.getFcm()==null){
+            fireBaseToken = "1324532";
+        }
         getLoginObservable = webServices.loginUser(name, passwd,fireBaseToken);
 
         getLoginObservable.subscribeOn(Schedulers.io())
@@ -98,9 +102,9 @@ public class LoginPresenter implements ILoginPresenter{
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(userDetails);
 
-                System.out.println(" ----------- LoginPresenter validateLoginDataBaseApi "+jsonString);
+                System.out.println(" -----------LoginPresenter getLoginDetails  validateLoginDataBaseApi "+jsonString);
                 if(jsonString!=null) {
-                    System.out.println("-----------getFilters OfferList"+jsonString);
+                    System.out.println("-----------getLoginDetails onNext "+jsonString);
                 }
                     /*if(userDetails.getError_status()==null){
                         userDetails.setError_status("");

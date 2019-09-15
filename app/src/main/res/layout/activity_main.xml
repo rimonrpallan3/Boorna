@@ -35,6 +35,8 @@
         android:text="@string/remove_updates" />
 
     <TextView
+        android:inputType="none"
+        android:textIsSelectable="true"
         android:id="@+id/location_updates_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

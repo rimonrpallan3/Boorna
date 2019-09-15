@@ -14,7 +14,7 @@ public class Helper {
         if(jsonString!=null) {
             editor.putString("UserDetails", jsonString);
             editor.commit();
-            System.out.println("-----------validateLoginDataBaseApi UserDetails : "+jsonString);
+            System.out.println("-----------Helper addUserGsonInSharedPrefrences UserDetails : "+jsonString);
         }
 
     }

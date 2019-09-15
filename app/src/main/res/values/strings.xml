@@ -10,6 +10,8 @@
     <!--Landing Page-->
     <string name="storage_and_location_rationale">Please allow Permission</string>
     <string name="loc_perm">Please grand location permission</string>
+    <string name="rationale_ask_ok">OK</string>
+    <string name="rationale_ask_cancel">Cancel</string>
 
     <!--Reset Password -->
     <string name="heading_one">Forgot Password ?</string>

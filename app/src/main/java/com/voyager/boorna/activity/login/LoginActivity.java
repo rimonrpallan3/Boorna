@@ -18,7 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.landing.LandingActivity;
-import com.voyager.boorna.activity.landing.LandingActivity_v2;
+import com.voyager.boorna.activity.landing.receiver.LocationUpdatesBroadcastReceiver;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.activity.login.presenter.ILoginPresenter;
 import com.voyager.boorna.activity.login.presenter.LoginPresenter;
@@ -28,28 +28,23 @@ import com.voyager.boorna.appconfig.Helper;
 import com.voyager.boorna.appconfig.NetworkDetector;
 
 
-import java.util.concurrent.TimeUnit;
-
 import androidx.appcompat.widget.AppCompatTextView;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by User on 23-Jan-19.
  */
 
 public class LoginActivity extends AppCompatActivity implements ILoginView {
-
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     Button btnSignIn;
     AppCompatEditText etEmail;
     AppCompatEditText etCPass;
     AppCompatTextView tvForgotPswd;
     AppCompatTextView tvErrorMsg;
-    private static final String TAG = "SignInPage";
+
     ILoginPresenter iLoginPresenter;
 
     FrameLayout loadingLayout;
@@ -90,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             startActivity(intent);
             finish();
         } else {
-            Log.d("LoginActivity", "No value present  : ");
+            Log.d(TAG, "No value present  : ");
         }
 
 
@@ -195,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         Gson gson = new Gson();
         String jsonString = gson.toJson(userDetails);
 
-        System.out.println(" ----------- LoginPresenter sendPParcelableObj "+jsonString);
+        System.out.println(TAG+" -----------  sendPParcelableObj "+jsonString);
         setResult(Helper.REQUEST_LOGEDIN, intent);
         intent.putExtra("UserDetails", userDetails);
         startActivity(intent);

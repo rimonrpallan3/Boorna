@@ -1,117 +1,95 @@
 package com.voyager.boorna.activity.landing;
 
 
-import android.Manifest;
-import android.app.Service;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import androidx.recyclerview.widget.RecyclerView;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.voyager.boorna.BuildConfig;
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.landing.helper.LocationHelper;
 import com.voyager.boorna.activity.landing.presenter.ILandingPresenter;
 import com.voyager.boorna.activity.landing.presenter.LandingPresenter;
+import com.voyager.boorna.activity.landing.receiver.LocationUpdatesBroadcastReceiver;
 import com.voyager.boorna.activity.landing.view.ILandingView;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.appconfig.Helper;
-import com.voyager.boorna.appconfig.NetworkDetector;
-import com.voyager.boorna.services.LocationService;
-import com.voyager.boorna.services.model.DriverDetails;
-import com.voyager.boorna.webservices.ApiClient;
-import com.voyager.boorna.webservices.WebServices;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import static com.voyager.boorna.activity.landing.helper.LocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE;
+import static com.voyager.boorna.activity.landing.helper.LocationHelper.checkPermissions;
 
 
-public class LandingActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
-        LocationListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        ILandingView {
+public class LandingActivity extends AppCompatActivity implements ILandingView {
 
-
-    String[] perms2 = {Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    };
-    private static final String TAG = "LandingActivity";
-    private static final int RC_STORAGE_AND_LOCATION = 122;
+    private static final String TAG = LandingActivity.class.getSimpleName();
     UserDetails userDetails;
-    private FusedLocationProviderClient mFusedLocationClient;
-    protected Location mLastLocation;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     Bundle bundle;
-    private Handler handler = new Handler();
-
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
     int userID = 0;
     String getLevel_code = "";
     int vehicleId = 0;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLocation;
-    private LocationManager mLocationManager;
-
-    private LocationRequest mLocationRequest;
-    private com.google.android.gms.location.LocationListener listener;
-    private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
-
-    private static final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 100;
     private Toolbar mTopToolbar;
+    String fireBaseToken;
 
     ILandingPresenter iLandingPresenter;
     RecyclerView rvLandingMainList;
+    /**
+     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
+     */
+    // FIXME: 5/16/17
+    private static final long UPDATE_INTERVAL = 10 * 1000;
+
+    /**
+     * The fastest rate for active location updates. Updates will never be more frequent
+     * than this value, but they may be less frequent.
+     */
+    // FIXME: 5/14/17
+    private static final long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL / 2;
+
+    /**
+     * The max time before batched results are delivered by location services. Results may be
+     * delivered sooner than this interval.
+     */
+    private static final long MAX_WAIT_TIME = UPDATE_INTERVAL * 3;
+
+    /**
+     * The entry point to Google Play Services.
+     */
+    private GoogleApiClient mGoogleApiClient;
+
+    /**
+     * Stores parameters for requests to the FusedLocationProviderApi.
+     */
+    private LocationRequest mLocationRequest;
+
+    private LocationCallback locationCallback;
+
+    public double wayLatitude = 0;
+    public double wayLongitude = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,60 +105,36 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
         sharedPrefs = getSharedPreferences(Helper.UserDetails,
                 Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
-        userDetails = new UserDetails();
+
         userDetails = (UserDetails) intent.getParcelableExtra("UserDetails");
         if (userDetails != null) {
             userID = userDetails.getUser_id();
             getLevel_code = userDetails.getLevel_code();
             vehicleId = userDetails.getVehicle_id();
-            System.out.println("LandingPage -- UserDetail- name : " + userDetails.getEmail());
-            System.out.println("LandingPage -- UserDetail- Id : " + userDetails.getUser_id());
-            System.out.println("LandingPage -- UserDetail- Id : " + userDetails.getLevel_code());
-            System.out.println("LandingPage -- UserDetail- fcm : " + userDetails.getFcm());
-            System.out.println("LandingPage -- UserDetail- vehicleId : " + userDetails.getVehicle_id());
+            LocationUpdatesBroadcastReceiver.userID = userDetails.getUser_id();
+            LocationUpdatesBroadcastReceiver.getLevel_code = userDetails.getLevel_code();
+            LocationUpdatesBroadcastReceiver.vehicleId = userDetails.getVehicle_id();
+            System.out.println(TAG+" -- UserDetail- email : " + userDetails.getEmail());
+            System.out.println(TAG+" -- UserDetail- userID : " + userDetails.getUser_id());
+            System.out.println(TAG+" -- UserDetail- LevelCode : " + userDetails.getLevel_code());
+            System.out.println(TAG+" -- UserDetail- fcm : " + userDetails.getFcm());
+            System.out.println(TAG+" -- UserDetail- vehicleId : " + userDetails.getVehicle_id());
         } else {
             userDetails = getUserSDetails();
+            userID = userDetails.getUser_id();
+            getLevel_code = userDetails.getLevel_code();
+            vehicleId = userDetails.getVehicle_id();
+            LocationUpdatesBroadcastReceiver.userID = userDetails.getUser_id();
+            LocationUpdatesBroadcastReceiver.getLevel_code = userDetails.getLevel_code();
+            LocationUpdatesBroadcastReceiver.vehicleId = userDetails.getVehicle_id();
         }
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        // methodRequiresTwoPermission();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        Criteria criteria = new Criteria();
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setSpeedRequired(true);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(false);
-
-        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        mLocationManager.getBestProvider(criteria, true);
-        // Here, thisActivity is the current activity
-
-        checkPermissions();
-        methodRequiresTwoPermission();
-
-      /*  locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(20 * 1000);
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        System.out.println(" getLatitude " + location.getLatitude() + " getLongitude " + location.getLongitude());
-                    }
-                }
-            }
-        };*/
-
+        createLocationRequest();
+        if (!checkPermissions(getApplicationContext())) {
+            LocationHelper.requestPermissions(TAG,R.id.activity_main,this);
+        }else {
+            requestLocationUpdates();
+        }
 
     }
 
@@ -221,486 +175,122 @@ public class LandingActivity extends AppCompatActivity implements EasyPermission
     }
 
 
-    @AfterPermissionGranted(RC_STORAGE_AND_LOCATION)
-    private void methodRequiresTwoPermission() {
-        if (EasyPermissions.hasPermissions(this, perms2)) {
-            // Already have permission, do the thing
-            // ...
-            System.out.println("methodRequiresTwoPermission ");
+    /**
+     * Sets up the location request. Android has two location request settings:
+     * {@code ACCESS_COARSE_LOCATION} and {@code ACCESS_FINE_LOCATION}. These settings control
+     * the accuracy of the current location. This sample uses ACCESS_FINE_LOCATION, as defined in
+     * the AndroidManifest.xml.
+     * <p/>
+     * When the ACCESS_FINE_LOCATION setting is specified, combined with a fast update
+     * interval (5 seconds), the Fused Location Provider API returns location updates that are
+     * accurate to within a few feet.
+     * <p/>
+     * These settings are appropriate for mapping applications that show real-time location
+     * updates.
+     */
+    private void createLocationRequest() {
+        mLocationRequest = LocationRequest.create();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
-                    return;
-                }
-            }
-            mFusedLocationClient.getLastLocation()
-                    .addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                mLastLocation = task.getResult();
-                                System.out.println("LandingActivity getLatitude : " + mLastLocation.getLatitude() + ", getLongitude : " + mLastLocation.getLongitude());
-                                Toast.makeText(getApplicationContext(), mLastLocation.getLatitude() + "," + mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                                Date today = new Date();
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-                                String dateToStr = format.format(today);
-                                System.out.println(dateToStr);
-                                Retrofit retrofit;
-                                WebServices webServices;
-                                retrofit = ApiClient.getRetrofitClient();
-                                webServices = retrofit.create(WebServices.class);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
 
-                                Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
-                                call.enqueue(new Callback<ArrayList<DriverDetails>>() {
-                                    @Override
-                                    public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                                        ArrayList<DriverDetails> model = response.body();
-                                    }
+        // Sets the fastest rate for active location updates. This interval is exact, and your
+        // application will never receive updates faster than this value.
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                                    @Override
-                                    public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
-                            } else {
-                                //Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_location_null), Snackbar.LENGTH_LONG).show();
-                                //showError("");
-                            }
-                        }
-                    });
+        // Sets the maximum time when batched location updates are delivered. Updates may be
+        // delivered sooner than this interval.
+        mLocationRequest.setMaxWaitTime(MAX_WAIT_TIME);
+    }
 
-            Intent intent = new Intent(getApplicationContext(), LocationService.class);
-            intent.putExtra("DriverUserModel", userDetails);
-            startService(intent);
-        } else {
-            // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_and_location_rationale),
-                    RC_STORAGE_AND_LOCATION, perms2);
+
+    private PendingIntent getPendingIntent() {
+        Intent intent = new Intent(this, LocationUpdatesBroadcastReceiver.class);
+        intent.setAction(LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES);
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+
+    /**
+     * Handles the Request Updates button and requests start of location updates.
+     */
+    public void requestLocationUpdates() {
+        try {
+            Log.i(TAG, "Starting location updates");
+            LocationHelper.setRequesting(this, true);
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(
+                    mLocationRequest, getPendingIntent());
+        } catch (SecurityException e) {
+            LocationHelper.setRequesting(this, false);
+            e.printStackTrace();
         }
+    }
+
+
+
+    /**
+     * Handles the Remove Updates button, and requests removal of location updates.
+     */
+    public void removeLocationUpdates(View view) {
+        Log.i(TAG, "Removing location updates");
+        LocationHelper.setRequesting(this, false);
+        LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
     }
 
     /**
-     * Return the current state of the permissions needed.
+     * Callback received when a permissions request has been completed.
      */
-    private boolean checkPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
-    }
-
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionResult");
 
-    private void startLocationPermissionRequest() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-
-    private void requestPermissions() {
-        boolean shouldProvideRationale =
-                ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        // Provide an additional rationale to the user. This would happen if the user denied the
-        // request previously, but didn't check the "Don't ask again" checkbox.
-        if (shouldProvideRationale) {
-
-            Snackbar.make(findViewById(android.R.id.content),
-                    getResources().getString(R.string.permission_rationale),
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getResources().getString(android.R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startLocationPermissionRequest();
-                        }
-                    }).show();
-
-        } else {
-
-            // Request permission. It's possible this can be auto answered if device policy
-            // sets the permission in a given state or the user denied the permission
-            // previously and checked "Never ask again".
-            startLocationPermissionRequest();
-        }
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-        if (!checkPermissions()) {
-            requestPermissions();
-        } else {
-            getLastLocation();
-
-        }
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void getLastLocation() {
-
-        //iLandingPresenter.getWeatherForecastWebService(String.valueOf(latitude), String.valueOf(longitude));
-        System.out.println("LandingActivity getLastLocation");
-
-        if (NetworkDetector.haveNetworkConnection(this)) {
-
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
-                return;
-            }
-            mFusedLocationClient.getLastLocation()
-                    .addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                Intent intent = new Intent(getApplicationContext(), LocationService.class);
-                                intent.putExtra("DriverUserModel", userDetails);
-                                startService(intent);
-                                mLastLocation = task.getResult();
-                                System.out.println("LandingActivity getLatitude : " + mLastLocation.getLatitude() + ", getLongitude : " + mLastLocation.getLongitude());
-                                Date today = new Date();
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-                                String dateToStr = format.format(today);
-                                System.out.println(dateToStr);
-                                Retrofit retrofit;
-                                WebServices webServices;
-                                retrofit = ApiClient.getRetrofitClient();
-                                webServices = retrofit.create(WebServices.class);
-
-                                Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
-                                call.enqueue(new Callback<ArrayList<DriverDetails>>() {
-                                    @Override
-                                    public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                                        ArrayList<DriverDetails> model = response.body();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
-
-
-                                //iLandingPresenter.getWeatherForecastWebService(String.valueOf(mLastLocation.getLatitude()), String.valueOf(mLastLocation.getLongitude()),apikey,apiForecastCount);
-                            } else {
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_location_null), Snackbar.LENGTH_LONG).show();
-                                //showError("");
-                            }
-                        }
-                    });
-
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_network_available), Snackbar.LENGTH_LONG).show();
-            //showError("");
-        }
-    }
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
-                return;
-            }
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            mLastLocation = task.getResult();
-                            System.out.println("LandingActivity getLatitude : " + mLastLocation.getLatitude() + ", getLongitude : " + mLastLocation.getLongitude());
-                            Toast.makeText(getApplicationContext(), mLastLocation.getLatitude() + "," + mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                            Date today = new Date();
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-                            String dateToStr = format.format(today);
-                            System.out.println(dateToStr);
-                            Retrofit retrofit;
-                            WebServices webServices;
-                            retrofit = ApiClient.getRetrofitClient();
-                            webServices = retrofit.create(WebServices.class);
-
-                            Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
-                            call.enqueue(new Callback<ArrayList<DriverDetails>>() {
-                                @Override
-                                public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                                    ArrayList<DriverDetails> model = response.body();
-                                }
-
-                                @Override
-                                public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
-                                    t.printStackTrace();
-                                }
-                            });
-                        } else {
-                            //Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_location_null), Snackbar.LENGTH_LONG).show();
-                            //showError("");
-                        }
-                    }
-                });
-
-        Intent intent = new Intent(getApplicationContext(), LocationService.class);
-        intent.putExtra("DriverUserModel", userDetails);
-        startService(intent);
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        System.out.println("Driver long:" + location.getLongitude() + ",lat : " + location.getLatitude());
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String dateToStr = format.format(today);
-        System.out.println(dateToStr);
-        Retrofit retrofit;
-        WebServices webServices;
-        retrofit = ApiClient.getRetrofitClient();
-        webServices = retrofit.create(WebServices.class);
-
-        Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
-        call.enqueue(new Callback<ArrayList<DriverDetails>>() {
-            @Override
-            public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                ArrayList<DriverDetails> model = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        startLocationUpdates();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-                if (mLocation == null) {
-                    startLocationUpdates();
-                }
-                if (mLocation != null) {
-
-                    // mLatitudeTextView.setText(String.valueOf(mLocation.getLatitude()));
-                    //mLongitudeTextView.setText(String.valueOf(mLocation.getLongitude()));
-                } else {
-                    Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
-                }
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length <= 0) {
+                // If user interaction was interrupted, the permission request is cancelled and you
+                // receive empty arrays.
+                Log.i(TAG, "User interaction was cancelled.");
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted. Kick off the process of building and connecting
+                // GoogleApiClient.
+                requestLocationUpdates();
             } else {
+                // Permission denied.
 
-                // No explanation needed, we can request the permission.
+                // Notify the user via a SnackBar that they have rejected a core permission for the
+                // app, which makes the Activity useless. In a real app, core permissions would
+                // typically be best requested during a welcome-screen flow.
 
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION);
-
-                // MY_PERMISSION_REQUEST_READ_FINE_LOCATION is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                // Additionally, it is important to remember that a permission might have been
+                // rejected without asking the user for permission (device policy or "Never ask
+                // again" prompts). Therefore, a user interface affordance is typically implemented
+                // when permissions are denied. Otherwise, your app could appear unresponsive to
+                // touches or interactions which have required permissions.
+                Snackbar.make(
+                        findViewById(R.id.activity_main),
+                        R.string.permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.settings, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Build intent that displays the App settings screen.
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
         }
-
-
     }
 
 
-    protected void startLocationUpdates() {
-        // Create the location request
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL);
-        // Request location updates
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest, this);
-            Log.d("reque", "--->>>>");
-
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-
-        } else {
-
-            // No explanation needed, we can request the permission.
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION);
-
-            // MY_PERMISSION_REQUEST_READ_FINE_LOCATION is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
-        }
 
 
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    Activity#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for Activity#requestPermissions for more details.
-                            return;
-                        }
-                    }
-                    mFusedLocationClient.getLastLocation()
-                            .addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Location> task) {
-                                    if (task.isSuccessful() && task.getResult() != null) {
-                                        Intent intent = new Intent(getApplicationContext(), LocationService.class);
-                                        intent.putExtra("DriverUserModel", userDetails);
-                                        startService(intent);
-                                        mLastLocation = task.getResult();
-                                        System.out.println("LandingActivity getLatitude : " + mLastLocation.getLatitude() + ", getLongitude : " + mLastLocation.getLongitude());
-                                        Date today = new Date();
-                                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-                                        String dateToStr = format.format(today);
-                                        System.out.println(dateToStr);
-                                        Retrofit retrofit;
-                                        WebServices webServices;
-                                        retrofit = ApiClient.getRetrofitClient();
-                                        webServices = retrofit.create(WebServices.class);
-
-                                        Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-                                        Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId, getLevel_code, mLastLocation.getLatitude(), mLastLocation.getLongitude(), dateToStr);
-                                        call.enqueue(new Callback<ArrayList<DriverDetails>>() {
-                                            @Override
-                                            public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                                                ArrayList<DriverDetails> model = response.body();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
-                                                t.printStackTrace();
-                                            }
-                                        });
-
-
-                                        //iLandingPresenter.getWeatherForecastWebService(String.valueOf(mLastLocation.getLatitude()), String.valueOf(mLastLocation.getLongitude()),apikey,apiForecastCount);
-                                    } else {
-                                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.snack_error_location_null), Snackbar.LENGTH_LONG).show();
-                                        //showError("");
-                                    }
-                                }
-                            });
-                    Intent intent = new Intent(getApplicationContext(), LocationService.class);
-                    intent.putExtra("DriverUserModel", userDetails);
-                    startService(intent);
-
-                    // permission was granted, yay! Do the contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }
