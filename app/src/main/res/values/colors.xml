@@ -36,4 +36,9 @@
     <color name="_11">#607D8B</color>
     <color name="_12">#795548</color>
 
+    <integer-array name="cell_colors">
+        <item>@color/white</item>
+        <item>@color/cell_gray</item>
+    </integer-array>
+
 </resources>

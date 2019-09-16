@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_marginBottom="@dimen/_10"
     android:weightSum="100">
 
 
@@ -29,7 +30,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTripTotWeight"
+        android:id="@+id/tvTripTotDistance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="33.33"

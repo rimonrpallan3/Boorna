@@ -151,11 +151,12 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
 
 
     private void populateOrderList(){
+        System.out.println(TAG+" -- populateOrderList: ");
         CardList cardList1 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
-                R.drawable.flag_2,
                 R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
                 R.drawable.boorna_package,
                 R.drawable.dumbell,
                 R.drawable.height,
@@ -164,8 +165,8 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "1234",
                 "200KM",
                 "Status",
-                "LoadCount : 2",
-                "UnLoadCount : 1",
+                "Load No: 2",
+                "UnLoad No: 1",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -178,39 +179,36 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
                 R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
                 R.drawable.boorna_package,
                 R.drawable.dumbell,
-                R.drawable.height,
-                R.drawable.width,
-                R.drawable.length,
-                R.drawable.length,
+                R.drawable.boorna_package,
                 "1234",
                 "200KM",
                 "Status",
-                "LoadCount : 2",
-                "UnLoadCount : 1",
+                "Load No: 2",
+                "UnLoad No: 1",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
                 "2000kg",
-                "6.5m",
-                "33m",
-                "22m");
+                "20"
+                );
         CardList cardList3 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
                 R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
                 R.drawable.boorna_package,
                 R.drawable.dumbell,
                 R.drawable.height,
                 R.drawable.width,
                 R.drawable.length,
-                R.drawable.length,
                 "1234",
                 "200KM",
                 "Status",
-                "LoadCount : 2",
-                "UnLoadCount : 1",
+                "Load No: 2",
+                "UnLoad No: 1",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -218,21 +216,83 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "6.5m",
                 "33m",
                 "22m");
+
         CardList cardList4 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
                 R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.boorna_package,
+                "1234",
+                "200KM",
+                "Status",
+                "Load No: 2",
+                "UnLoad No: 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "20"
+        );
+        CardList cardList5 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
                 R.drawable.boorna_package,
                 R.drawable.dumbell,
                 R.drawable.height,
                 R.drawable.width,
                 R.drawable.length,
+                "1234",
+                "200KM",
+                "Status",
+                "Load No: 2",
+                "UnLoad No: 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "6.5m",
+                "33m",
+                "22m");
+
+        CardList cardList6 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.boorna_package,
+                "1234",
+                "200KM",
+                "Status",
+                "Load No: 2",
+                "UnLoad No: 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "20"
+        );
+        CardList cardList7 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.flag_2,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.height,
+                R.drawable.width,
                 R.drawable.length,
                 "1234",
                 "200KM",
                 "Status",
-                "LoadCount : 2",
-                "UnLoadCount : 1",
+                "Load No: 2",
+                "UnLoad No: 1",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -244,6 +304,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         cardLists.add(cardList2);
         cardLists.add(cardList3);
         cardLists.add(cardList4);
+        cardLists.add(cardList5);
+        cardLists.add(cardList6);
+        cardLists.add(cardList7);
         landingAdapter.notifyDataSetChanged();
 
     }
@@ -252,14 +315,18 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
 
 
     private void orderVerticalList(){
+        System.out.println(TAG+" -- orderVerticalList: ");
         // add a divider after each item for more clarity
         //rvHorizontalView.addItemDecoration(new DividerItemDecoration(activity, LinearLayoutManager.HORIZONTAL));
         landingAdapter = new LandingAdapter(cardLists);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvLandingMainList.setLayoutManager(horizontalLayoutManager);
+        rvLandingMainList.setHasFixedSize(true);
+        rvLandingMainList.setLayoutManager(new LinearLayoutManager(this));
         rvLandingMainList.setAdapter(landingAdapter);
-        rvLandingMainList.setLayoutFrozen(true);
         populateOrderList();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(cardLists);
+
+        System.out.println(TAG+" -- orderVerticalList: jsonString : "+jsonString);
     }
 
 

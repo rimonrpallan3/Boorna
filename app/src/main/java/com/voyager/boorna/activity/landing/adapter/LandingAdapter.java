@@ -38,21 +38,27 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull LandingAdapter.ViewHolder holder, int position) {
         CardList cardList = cardLists.get(position);
-        int color = holder.cvCell.getContext().getResources().getColor(getColorCode());
-        holder.cvCell.setCardBackgroundColor(color);
-        holder.ivFrom.setImageResource(cardList.getIvFrom());
+        if(position %2 == 1)
+        {
+            int colorWhite = holder.cvCell.getContext().getResources().getColor(R.color.white);
+            holder.cvCell.setCardBackgroundColor(colorWhite);
+        } else {
+            int colorGrey = holder.cvCell.getContext().getResources().getColor(R.color.cell_gray);
+            holder.cvCell.setCardBackgroundColor(colorGrey);
+        }
+        /*int color = holder.cvCell.getContext().getResources().getColor(getColorCode());
+        holder.cvCell.setCardBackgroundColor(color);*/
+        holder.ivTripCode.setImageResource(cardList.getIvTripCode());
         holder.ivFrom.setImageResource(cardList.getIvFrom());
         holder.ivFromFlag.setImageResource(cardList.getIvFromFlag());
         holder.ivTo.setImageResource(cardList.getIvTo());
         holder.ivToFlag.setImageResource(cardList.getIvToFlag());
-        holder.ivProductHeight.setImageResource(cardList.getIvProductHeight());
-        holder.ivProductLength.setImageResource(cardList.getIvProductLength());
         holder.ivProductLoad.setImageResource(cardList.getIvProductLoad());
-        holder.ivProductWidth.setImageResource(cardList.getIvProductWidth());
         holder.ivProductWeight.setImageResource(cardList.getIvProductWeight());
         holder.tvTripCode.setText(cardList.getTvTripCode());
+        holder.tvToPlace.setText(cardList.getTvToPlace());
         holder.tvTripStatus.setText(cardList.getTvTripStatus());
-        holder.tvTripTotWeight.setText(cardList.getTvTripTotWeight());
+        holder.tvTripTotDistance.setText(cardList.getTvTripTotDistance());
         holder.tvFromPlace.setText(cardList.getTvToPlace());
         holder.tvFromPlace.setText(cardList.getTvFromPlace());
         holder.tvLoadCnt.setText(cardList.getTvLoadCnt());
@@ -64,11 +70,15 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
             holder.llProductHeight.setVisibility(View.GONE);
             holder.llProductLength.setVisibility(View.GONE);
             holder.tvProductPallets.setText(cardList.getTvProductPallets());
+            holder.ivProductPallets.setImageResource(cardList.getIvProductPallets());
         }else {
             holder.llProductPallets.setVisibility(View.GONE);
             holder.tvProductHeight.setText(cardList.getTvProductHeight());
             holder.tvProductLength.setText(cardList.getTvProductLength());
             holder.tvProductWidth.setText(cardList.getTvProductWidth());
+            holder.ivProductWidth.setImageResource(cardList.getIvProductWidth());
+            holder.ivProductLength.setImageResource(cardList.getIvProductLength());
+            holder.ivProductHeight.setImageResource(cardList.getIvProductHeight());
         }
     }
 
@@ -80,6 +90,16 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
     private int getColorCode() {
         int[] color = {
                 R.color.white,
+                R.color.cell_gray,
+                R.color.white,
+                R.color.cell_gray,
+                R.color.white,
+                R.color.cell_gray,
+                R.color.white,
+                R.color.cell_gray,
+                R.color.white,
+                R.color.cell_gray,
+                R.color.white,
                 R.color.cell_gray
         };
         int min = 0, max = color.length;
@@ -90,7 +110,11 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return 0;
+        if(cardLists!=null) {
+            return cardLists.size();
+        }else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,7 +123,7 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
         AppCompatImageView ivFrom;
         AppCompatImageView ivFromFlag;
         AppCompatTextView tvTripCode;
-        AppCompatTextView tvTripTotWeight;
+        AppCompatTextView tvTripTotDistance;
         AppCompatTextView tvTripStatus;
         AppCompatTextView tvLoadCnt;
         AppCompatTextView tvUnLoadCnt;
@@ -133,7 +157,7 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
             cvCell = view.findViewById(R.id.cvCell);
             ivTripCode = view.findViewById(R.id.ivTripCode);
             tvTripCode = view.findViewById(R.id.tvTripCode);
-            tvTripTotWeight = view.findViewById(R.id.tvTripTotWeight);
+            tvTripTotDistance = view.findViewById(R.id.tvTripTotDistance);
             tvTripStatus = view.findViewById(R.id.tvTripStatus);
             ivFrom = view.findViewById(R.id.ivFrom);
             ivFromFlag = view.findViewById(R.id.ivFromFlag);

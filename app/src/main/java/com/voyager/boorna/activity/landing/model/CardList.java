@@ -3,36 +3,34 @@ package com.voyager.boorna.activity.landing.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.voyager.boorna.R;
-
 public class CardList implements Parcelable {
 
-    int ivTripCode = 0;
-    int ivFrom = 0;
-    int ivFromFlag = 0;
-    int ivTo = 0;
-    int ivToFlag = 0;
-    int ivProductLoad = 0;
-    int ivProductWeight = 0;
-    int ivProductPallets = 0;
-    int ivProductHeight = 0;
-    int ivProductWidth = 0;
-    int ivProductLength = 0;
-    String tvTripCode = "";
-    String tvTripTotWeight = "";
-    String tvTripStatus = "";
-    String tvLoadCnt = "";
-    String tvUnLoadCnt = "";
-    String tvToPlace = "";
-    String tvFromPlace = "";
-    String tvProductLoad="";
-    String tvProductWeight="";
-    String tvProductPallets="";
-    String tvProductHeight="";
-    String tvProductWidth="";
-    String tvProductLength="";
+    int ivTripCode;
+    int ivFrom ;
+    int ivFromFlag ;
+    int ivTo;
+    int ivToFlag ;
+    int ivProductLoad;
+    int ivProductWeight ;
+    int ivProductPallets ;
+    int ivProductHeight ;
+    int ivProductWidth;
+    int ivProductLength ;
+    String tvTripCode;
+    String tvTripTotDistance;
+    String tvTripStatus;
+    String tvLoadCnt;
+    String tvUnLoadCnt ;
+    String tvToPlace;
+    String tvFromPlace;
+    String tvProductLoad;
+    String tvProductWeight;
+    String tvProductPallets;
+    String tvProductHeight;
+    String tvProductWidth;
+    String tvProductLength;
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotWeight, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -44,7 +42,7 @@ public class CardList implements Parcelable {
         this.ivProductWidth = ivProductWidth;
         this.ivProductLength = ivProductLength;
         this.tvTripCode = tvTripCode;
-        this.tvTripTotWeight = tvTripTotWeight;
+        this.tvTripTotDistance = tvTripTotDistance;
         this.tvTripStatus = tvTripStatus;
         this.tvLoadCnt = tvLoadCnt;
         this.tvUnLoadCnt = tvUnLoadCnt;
@@ -57,7 +55,7 @@ public class CardList implements Parcelable {
         this.tvProductLength = tvProductLength;
     }
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotWeight, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductPallets) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductPallets) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -67,7 +65,7 @@ public class CardList implements Parcelable {
         this.ivProductWeight = ivProductWeight;
         this.ivProductPallets = ivProductPallets;
         this.tvTripCode = tvTripCode;
-        this.tvTripTotWeight = tvTripTotWeight;
+        this.tvTripTotDistance = tvTripTotDistance;
         this.tvTripStatus = tvTripStatus;
         this.tvLoadCnt = tvLoadCnt;
         this.tvUnLoadCnt = tvUnLoadCnt;
@@ -174,12 +172,12 @@ public class CardList implements Parcelable {
         this.tvTripCode = tvTripCode;
     }
 
-    public String getTvTripTotWeight() {
-        return tvTripTotWeight;
+    public String getTvTripTotDistance() {
+        return tvTripTotDistance;
     }
 
-    public void setTvTripTotWeight(String tvTripTotWeight) {
-        this.tvTripTotWeight = tvTripTotWeight;
+    public void setTvTripTotDistance(String tvTripTotDistance) {
+        this.tvTripTotDistance = tvTripTotDistance;
     }
 
     public String getTvTripStatus() {
@@ -290,7 +288,7 @@ public class CardList implements Parcelable {
         dest.writeInt(this.ivProductWidth);
         dest.writeInt(this.ivProductLength);
         dest.writeString(this.tvTripCode);
-        dest.writeString(this.tvTripTotWeight);
+        dest.writeString(this.tvTripTotDistance);
         dest.writeString(this.tvTripStatus);
         dest.writeString(this.tvLoadCnt);
         dest.writeString(this.tvUnLoadCnt);
@@ -320,7 +318,7 @@ public class CardList implements Parcelable {
         this.ivProductWidth = in.readInt();
         this.ivProductLength = in.readInt();
         this.tvTripCode = in.readString();
-        this.tvTripTotWeight = in.readString();
+        this.tvTripTotDistance = in.readString();
         this.tvTripStatus = in.readString();
         this.tvLoadCnt = in.readString();
         this.tvUnLoadCnt = in.readString();

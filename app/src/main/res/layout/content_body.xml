@@ -20,6 +20,7 @@
 
             <LinearLayout
                 android:weightSum="100"
+                android:layout_marginBottom="@dimen/_04"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -68,6 +69,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:weightSum="100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,6 +136,7 @@
                         android:id="@+id/tvLoadCnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12"
                         android:text="Loaded"/>
 
                 </LinearLayout>
@@ -151,6 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10"
+                        android:textSize="@dimen/_12"
                         android:text="UnLoaded" />
 
                 </LinearLayout>
@@ -185,6 +189,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductLoad"
                 android:weightSum="100"
                 android:layout_width="match_parent"
@@ -228,6 +233,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductWeight"
                 android:weightSum="100"
                 android:layout_width="match_parent"
@@ -271,6 +277,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductPallets"
                 android:weightSum="100"
                 android:layout_width="match_parent"
@@ -314,6 +321,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductHeight"
                 android:weightSum="100"
                 android:layout_width="match_parent"
@@ -357,6 +365,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductWidth"
                 android:weightSum="100"
                 android:layout_width="match_parent"
@@ -400,6 +409,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/_04"
                 android:id="@+id/llProductLength"
                 android:weightSum="100"
                 android:layout_width="match_parent"
