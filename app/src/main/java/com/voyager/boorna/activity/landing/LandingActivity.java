@@ -146,6 +146,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         }
         orderVerticalList();
 
+
     }
 
 
