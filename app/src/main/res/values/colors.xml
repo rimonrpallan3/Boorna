@@ -7,6 +7,10 @@
     <color name="login_btn_color">#007bff</color>
     <color name="layout_error_color">#ff888c</color>
 
+    <!--Landing Page-->
+    <color name="cell_gray">#343a40</color>
+
+
     <color name="white">#FFF</color>
     <color name="green">#00513f</color>
     <color name="black">#000000</color>
@@ -17,5 +21,19 @@
     <color name="dark_gray">#a9a9a9</color>
     <color name="red_dull">#EF5350</color>
     <color name="black_transparent">#70000000</color>
+
+    <!--Color for the cards -->
+    <color name="_1">#297bf4</color>
+    <color name="_2">#f42929</color>
+    <color name="_3">#29f42e</color>
+    <color name="_4">#FF4081</color>
+    <color name="_5">#f6ea01</color>
+    <color name="_6">#9C27B0</color>
+    <color name="_7">#3F51B5</color>
+    <color name="_8">#009688</color>
+    <color name="_9">#FF9800</color>
+    <color name="_10">#000000</color>
+    <color name="_11">#607D8B</color>
+    <color name="_12">#795548</color>
 
 </resources>

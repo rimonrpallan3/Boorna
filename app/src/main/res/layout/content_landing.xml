@@ -2,34 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="@dimen/_10"
     android:layout_marginRight="@dimen/_10"
     android:layout_marginTop="@dimen/_10"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/content_header_land"
-        android:id="@+id/llErrorMsg"
-        android:visibility="visible" />
-    <include
-        layout="@layout/content_body"
-        android:id="@+id/llErrorMsg"
-        android:visibility="visible" />
-
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvCell"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_margin="@dimen/_10"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
 
+            <!--Header Part-->
+
+            <include
+                layout="@layout/content_header_land"
+                android:visibility="visible" />
+
+
+            <!--Header Part End -->
+
+            <!--Body Part  Start-->
+
+            <include
+                layout="@layout/content_body"
+                android:visibility="visible" />
 
         </LinearLayout>
 
-    </LinearLayout>
+        <!--Body Part  End-->
+
+    </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,13 +32,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.voyager.boorna.BuildConfig;
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.landing.adapter.LandingAdapter;
 import com.voyager.boorna.activity.landing.helper.LocationHelper;
+import com.voyager.boorna.activity.landing.model.CardList;
 import com.voyager.boorna.activity.landing.presenter.ILandingPresenter;
 import com.voyager.boorna.activity.landing.presenter.LandingPresenter;
 import com.voyager.boorna.activity.landing.receiver.LocationUpdatesBroadcastReceiver;
 import com.voyager.boorna.activity.landing.view.ILandingView;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.appconfig.Helper;
+
+import java.util.ArrayList;
 
 import static com.voyager.boorna.activity.landing.helper.LocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE;
 import static com.voyager.boorna.activity.landing.helper.LocationHelper.checkPermissions;
@@ -92,6 +97,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
     public double wayLatitude = 0;
     public double wayLongitude = 0;
 
+    LandingAdapter landingAdapter;
+    ArrayList<CardList> cardLists = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,8 +144,123 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         }else {
             requestLocationUpdates();
         }
+        orderVerticalList();
 
     }
+
+
+    private void populateOrderList(){
+        CardList cardList1 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.height,
+                R.drawable.width,
+                R.drawable.length,
+                "1234",
+                "200KM",
+                "Status",
+                "LoadCount : 2",
+                "UnLoadCount : 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "6.5m",
+                "33m",
+                "22m");
+
+        CardList cardList2 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.height,
+                R.drawable.width,
+                R.drawable.length,
+                R.drawable.length,
+                "1234",
+                "200KM",
+                "Status",
+                "LoadCount : 2",
+                "UnLoadCount : 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "6.5m",
+                "33m",
+                "22m");
+        CardList cardList3 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.height,
+                R.drawable.width,
+                R.drawable.length,
+                R.drawable.length,
+                "1234",
+                "200KM",
+                "Status",
+                "LoadCount : 2",
+                "UnLoadCount : 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "6.5m",
+                "33m",
+                "22m");
+        CardList cardList4 = new CardList(R.drawable.hash_key,
+                R.drawable.arrow_point_to_up,
+                R.drawable.flag_2,
+                R.drawable.arrow_point_to_down,
+                R.drawable.boorna_package,
+                R.drawable.dumbell,
+                R.drawable.height,
+                R.drawable.width,
+                R.drawable.length,
+                R.drawable.length,
+                "1234",
+                "200KM",
+                "Status",
+                "LoadCount : 2",
+                "UnLoadCount : 1",
+                "MILANO",
+                "BUCHAREST",
+                "Steal",
+                "2000kg",
+                "6.5m",
+                "33m",
+                "22m");
+        cardLists.add(cardList1);
+        cardLists.add(cardList2);
+        cardLists.add(cardList3);
+        cardLists.add(cardList4);
+        landingAdapter.notifyDataSetChanged();
+
+    }
+
+
+
+
+    private void orderVerticalList(){
+        // add a divider after each item for more clarity
+        //rvHorizontalView.addItemDecoration(new DividerItemDecoration(activity, LinearLayoutManager.HORIZONTAL));
+        landingAdapter = new LandingAdapter(cardLists);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvLandingMainList.setLayoutManager(horizontalLayoutManager);
+        rvLandingMainList.setAdapter(landingAdapter);
+        rvLandingMainList.setLayoutFrozen(true);
+        populateOrderList();
+    }
+
 
 
 

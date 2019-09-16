@@ -2,47 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="100"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="100">
 
 
-        <LinearLayout
-            android:layout_weight="33.33"
-            android:layout_width="0dp"
-            android:orientation="horizontal"
-            android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="33.33"
+        android:orientation="horizontal">
 
-            <ImageView
-                android:src="@android:drawable/stat_sys_vp_phone_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10"/>
-            <TextView
-                android:text="1234"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivTripCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10"
+            android:src="@android:drawable/stat_sys_vp_phone_call" />
 
-            </TextView>
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTripCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1234">
 
-        <TextView
-            android:text="200KG"
-            android:layout_weight="33.33"
-            android:layout_width="0dp"
-            android:gravity="center"
-            android:layout_height="wrap_content">
+        </androidx.appcompat.widget.AppCompatTextView>
+    </LinearLayout>
 
-        </TextView>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTripTotWeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="33.33"
+        android:gravity="center"
+        android:text="200KG">
 
-        <TextView
-            android:text="Status"
-            android:gravity="right"
-            android:paddingRight="@dimen/_10"
-            android:layout_weight="33.33"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+    </androidx.appcompat.widget.AppCompatTextView>
 
-        </TextView>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTripStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="33.33"
+        android:gravity="right"
+        android:paddingRight="@dimen/_10"
+        android:text="Status">
+
+    </androidx.appcompat.widget.AppCompatTextView>
 
 
 </LinearLayout>
