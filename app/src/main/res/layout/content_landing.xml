@@ -12,19 +12,30 @@
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">
-
         <LinearLayout
             android:layout_margin="@dimen/_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_rect_border"
             android:orientation="vertical">
 
-
             <!--Header Part-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/_04"
+                android:background="@color/_10"/>
 
             <include
                 layout="@layout/content_header_land"
                 android:visibility="visible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_04"
+                android:layout_marginBottom="@dimen/_04"
+                android:background="@color/_10"/>
 
 
             <!--Header Part End -->

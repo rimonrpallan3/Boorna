@@ -12,6 +12,7 @@
 
     <!-- DEFAULT HOST -->
     <string name="DEFAULT_HOST">www.apixu.com</string>
+    <string name="google_maps_key">AIzaSyAdr9nOp2NZqX3j9AbBGf-xipMNrVzhBak</string>
 
 
     <!-- APP DESIGN -->
