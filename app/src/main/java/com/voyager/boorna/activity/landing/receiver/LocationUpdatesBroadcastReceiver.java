@@ -113,7 +113,7 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     Date today = new Date();
 
 
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     String dateToStr = format.format(today);
                     System.out.println(dateToStr);
                     Retrofit retrofit;
