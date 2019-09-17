@@ -82,20 +82,20 @@ public class LocationService extends Service implements LocationListener {
             Log.e("Driver long: ", location.getLongitude() + "");
             System.out.println("Driver long:"+location.getLongitude()+",lat : "+location.getLatitude());
             Date today = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
             String dateToStr = format.format(today);
             System.out.println(dateToStr);
 
             Log.d("LoginPresenter", " validateLoginDataBaseApi : ");
-            Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(driverUserModel.getUser_id(),driverUserModel.getVehicle_id(),driverUserModel.getLevel_code(),location.getLatitude(), location.getLongitude(),dateToStr);
-            call.enqueue(new Callback<ArrayList<DriverDetails>>() {
+            Call<DriverDetails> call = webServices.driverProfileStatus(driverUserModel.getUser_id(),driverUserModel.getVehicle_id(),driverUserModel.getLevel_code(),location.getLatitude(), location.getLongitude(),dateToStr);
+            call.enqueue(new Callback<DriverDetails>() {
                 @Override
-                public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                    ArrayList<DriverDetails> model = response.body();
+                public void onResponse(Call<DriverDetails> call, Response<DriverDetails> response) {
+                    DriverDetails model = response.body();
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
+                public void onFailure(Call<DriverDetails> call, Throwable t) {
                     t.printStackTrace();
                 }
             });

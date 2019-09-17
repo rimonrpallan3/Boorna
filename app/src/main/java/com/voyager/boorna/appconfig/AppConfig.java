@@ -5,7 +5,7 @@ public class AppConfig {
 
     public static String BASE_URL = "";
     public static String API_KEY = "";
-    public static String API_FORECAST_COUNT = "";
+    public static String GOOGLE_MAP_API_KEY = "";
 
 
 }

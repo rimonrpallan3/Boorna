@@ -30,7 +30,7 @@ public interface WebServices {
                                       );
     @FormUrlEncoded
     @POST("driverLocationSave")
-    Call<ArrayList<DriverDetails>> driverProfileStatus(@Nullable @Field("driver_id") int driverID,
+    Call<DriverDetails> driverProfileStatus(@Nullable @Field("driver_id") int driverID,
                                                   @Nullable @Field("vehicle_id") int vehicleId,
                                                   @Nullable @Field("level_code") String level_code,
                                                   @Nullable @Field("lat") double driverLatitude,

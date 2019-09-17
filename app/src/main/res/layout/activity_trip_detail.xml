@@ -72,7 +72,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -100,7 +100,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -184,7 +184,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -266,7 +266,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -310,7 +310,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -396,7 +396,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:background="@color/_10" />
 
 
@@ -456,7 +456,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10"
                 android:background="@color/cell_gray"
-                app:titleTextColor="@color/white"
+                android:gravity="center"
+                android:layout_gravity="center"
+                app:titleTextColor="@color/black"
                 app:title="Instruction of Admin and Customer"
                 android:elevation="@dimen/_04"
                 android:visibility="visible" />
@@ -467,26 +469,35 @@
                 android:layout_marginRight="@dimen/_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10"
+                android:textStyle="bold"
                 android:text="Admin Instruction"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvAdminInst"
-                android:layout_marginRight="@dimen/_22"
+                android:layout_marginLeft="@dimen/_20"
+                android:layout_marginRight="@dimen/_20"
                 android:layout_marginTop="@dimen/_10"
                 android:layout_width="match_parent"
+                android:text="@string/admin_instruction"
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_marginTop="@dimen/_10"
                 android:layout_marginRight="@dimen/_10"
+                android:layout_marginLeft="@dimen/_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="Customer Instruction"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_marginTop="@dimen/_10"
-                android:layout_marginRight="@dimen/_22"
+                android:layout_marginLeft="@dimen/_20"
+                android:layout_marginRight="@dimen/_20"
+                android:layout_marginBottom="@dimen/_10"
                 android:id="@+id/tvCustomerInst"
+                android:text="@string/customer_instruction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

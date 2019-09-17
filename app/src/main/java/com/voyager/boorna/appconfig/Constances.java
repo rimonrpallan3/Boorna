@@ -7,7 +7,7 @@ public class Constances {
    // public static String BASE_URL = "https://droideve.com/smartgeostore";
     public static String BASE_URL = AppConfig.BASE_URL;
     public static String API_KEY = AppConfig.API_KEY;
-    public static String API_FORECAST_COUNT = AppConfig.API_KEY;
+    public static String GOOGLE_MAP_API_KEY = AppConfig.GOOGLE_MAP_API_KEY;
 
     //CHAT CONFIG SERVER
     public static String SERVER_ADDRESS_IP;

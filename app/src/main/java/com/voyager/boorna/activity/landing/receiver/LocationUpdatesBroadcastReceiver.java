@@ -76,6 +76,16 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
             if (ACTION_PROCESS_UPDATES.equals(action)) {
                 LocationResult result = LocationResult.extractResult(intent);
                 if (result != null) {
+                    Integer userID2 = 0;
+                    String getLevel_code2 = "";
+                    Integer vehicleId2 = 0;
+                    userID2 = intent.getIntExtra("userID",0);
+                    getLevel_code2= intent.getStringExtra("userID");
+                    vehicleId2 = intent.getIntExtra("userID",0);
+
+                    System.out.println(TAG+" -- Intent- userID : " + userID2);
+                    System.out.println(TAG+" -- Intent- getLevel_code : " + getLevel_code2);
+                    System.out.println(TAG+" -- Intent- vehicleId : " + vehicleId2);
 
                     userID = LocationUpdatesBroadcastReceiver.userID;
                     getLevel_code = LocationUpdatesBroadcastReceiver.getLevel_code ;
@@ -101,22 +111,24 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     Toast.makeText(context,TAG+" "+locString,Toast.LENGTH_LONG).show();
 
                     Date today = new Date();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                     String dateToStr = format.format(today);
                     System.out.println(dateToStr);
                     Retrofit retrofit;
                     WebServices webServices;
                     retrofit = ApiClient.getRetrofitClient();
                     webServices = retrofit.create(WebServices.class);
-                    Call<ArrayList<DriverDetails>> call = webServices.driverProfileStatus(userID,vehicleId,getLevel_code,location2.getLatitude(), location2.getLongitude(),dateToStr);
-                    call.enqueue(new Callback<ArrayList<DriverDetails>>() {
+                    Call<DriverDetails> call = webServices.driverProfileStatus(userID,vehicleId,getLevel_code,location2.getLatitude(), location2.getLongitude(),dateToStr);
+                    call.enqueue(new Callback<DriverDetails>() {
                         @Override
-                        public void onResponse(Call<ArrayList<DriverDetails>> call, Response<ArrayList<DriverDetails>> response) {
-                            ArrayList<DriverDetails> model = response.body();
+                        public void onResponse(Call<DriverDetails> call, Response<DriverDetails> response) {
+                            DriverDetails model = response.body();
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<DriverDetails>> call, Throwable t) {
+                        public void onFailure(Call<DriverDetails> call, Throwable t) {
                             t.printStackTrace();
                         }
                     });

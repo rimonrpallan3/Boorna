@@ -14,27 +14,38 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.voyager.boorna.BuildConfig;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.landing.adapter.LandingAdapter;
 import com.voyager.boorna.activity.landing.helper.LocationHelper;
 import com.voyager.boorna.activity.landing.model.CardList;
+import com.voyager.boorna.activity.landing.model.TripOtherDetails;
+import com.voyager.boorna.activity.landing.model.TripPickDropLoc;
 import com.voyager.boorna.activity.landing.presenter.ILandingPresenter;
 import com.voyager.boorna.activity.landing.presenter.LandingPresenter;
 import com.voyager.boorna.activity.landing.receiver.LocationUpdatesBroadcastReceiver;
@@ -46,9 +57,10 @@ import java.util.ArrayList;
 
 import static com.voyager.boorna.activity.landing.helper.LocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE;
 import static com.voyager.boorna.activity.landing.helper.LocationHelper.checkPermissions;
+import static com.voyager.boorna.activity.landing.receiver.LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES;
 
 
-public class LandingActivity extends AppCompatActivity implements ILandingView ,SharedPreferences.OnSharedPreferenceChangeListener{
+public class LandingActivity extends AppCompatActivity implements ILandingView ,SharedPreferences.OnSharedPreferenceChangeListener,NavigationView.OnNavigationItemSelectedListener{
 
     private static final String TAG = LandingActivity.class.getSimpleName();
     UserDetails userDetails;
@@ -99,6 +111,13 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
 
     LandingAdapter landingAdapter;
     ArrayList<CardList> cardLists = new ArrayList<>();
+    ArrayList<TripPickDropLoc> tripPickDropLocs = new ArrayList<>();
+    ArrayList<TripOtherDetails> tripOtherDetails = new ArrayList<>();
+
+    public DrawerLayout drawerLayout;
+    public NavigationView navigationView;
+    private ActionBarDrawerToggle mDrawerToggle;
+    TextView tvNavHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,20 +125,22 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         setContentView(R.layout.activity_landing);
         Intent intent = getIntent();
         bundle = new Bundle();
-        mTopToolbar = findViewById(R.id.my_toolbar);
+
         rvLandingMainList = findViewById(R.id.rvLandingMainList);
-        setSupportActionBar(mTopToolbar);
+
+        setupNavigation();
 
         iLandingPresenter = new LandingPresenter(this);
-        sharedPrefs = getSharedPreferences(Helper.UserDetails,
-                Context.MODE_PRIVATE);
+        sharedPrefs = getSharedPreferences(Helper.UserDetails, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
-        userDetails = (UserDetails) intent.getParcelableExtra("UserDetails");
+
+        userDetails = intent.getParcelableExtra("UserDetails");
         if (userDetails != null) {
             userID = userDetails.getUser_id();
             getLevel_code = userDetails.getLevel_code();
             vehicleId = userDetails.getVehicle_id();
+            //tvNavHeader.setText(userDetails.getUser_employee_name());
             LocationUpdatesBroadcastReceiver.userID = userDetails.getUser_id();
             LocationUpdatesBroadcastReceiver.getLevel_code = userDetails.getLevel_code();
             LocationUpdatesBroadcastReceiver.vehicleId = userDetails.getVehicle_id();
@@ -140,12 +161,67 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
 
         createLocationRequest();
         if (!checkPermissions(getApplicationContext())) {
-            LocationHelper.requestPermissions(TAG,R.id.activity_main,this);
+            LocationHelper.requestPermissions(TAG,R.id.drawer_layout,this);
         }else {
             requestLocationUpdates();
         }
         orderVerticalList();
+        intent = new Intent();
+        intent.setAction(ACTION_PROCESS_UPDATES);
+        Bundle b = new Bundle();
+        b.putInt("userID", userID);
+        b.putString("getLevel_code", getLevel_code);
+        b.putInt("vehicleId", vehicleId);
+        intent.putExtras(b);
+        sendBroadcast(intent);
 
+
+    }
+
+    // Setting Up One Time Navigation
+    private void setupNavigation() {
+
+        mTopToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        navigationView = findViewById(R.id.nav_view);/*
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        tvNavHeader =headerView.findViewById(R.id.tvNavHeader);*/
+
+
+        tvNavHeader = findViewById(R.id.tvNavHeader);
+
+
+
+
+        navigationView.setNavigationItemSelectedListener(this);
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,mTopToolbar ,  R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getActionBar().setTitle(mTitle);
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getActionBar().setTitle(mDrawerTitle);
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
 
     }
 
@@ -154,6 +230,21 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         String adminInst = getString(R.string.admin_instruction);
         String customerInst = getString(R.string.admin_instruction);
         System.out.println(TAG+" -- populateOrderList: ");
+        TripPickDropLoc tripPickDropLoc1 = new TripPickDropLoc("pick",R.drawable.flag_2,"BUCHAREST","30-09-2019");
+        TripPickDropLoc tripPickDropLoc2 = new TripPickDropLoc("pick",R.drawable.flag,"TIMISOARA","01-10-2019");
+        TripPickDropLoc tripPickDropLoc3 = new TripPickDropLoc("drop",R.drawable.flag_3,"SLOVENIA","02-10-2019");
+        TripPickDropLoc tripPickDropLoc4 = new TripPickDropLoc("drop",R.drawable.flag_2,"MILAN","04-10-2019");
+        tripPickDropLocs.add(tripPickDropLoc1);
+        tripPickDropLocs.add(tripPickDropLoc2);
+        tripPickDropLocs.add(tripPickDropLoc3);
+        tripPickDropLocs.add(tripPickDropLoc4);
+        TripOtherDetails otherDetails1 = new TripOtherDetails("Flammable");
+        TripOtherDetails otherDetails2 = new TripOtherDetails("Explosive");
+        TripOtherDetails otherDetails3 = new TripOtherDetails("Maintain 53.6 degree F ");
+        tripOtherDetails.add(otherDetails1);
+        tripOtherDetails.add(otherDetails2);
+        tripOtherDetails.add(otherDetails3);
+
         CardList cardList1 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
@@ -177,7 +268,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "33m",
                 "22m",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
 
         CardList cardList2 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
@@ -191,15 +284,16 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "Canceled",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
                 "2000kg",
-                "20"
-                ,
+                "20",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
         CardList cardList3 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag_2,
@@ -214,7 +308,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "Delivered",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -223,7 +317,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "33m",
                 "22m",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
 
         CardList cardList4 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
@@ -237,15 +333,16 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "Canceled",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
                 "2000kg",
-                "20"
-                ,
+                "20",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
         CardList cardList5 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag,
@@ -260,7 +357,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "Delivered",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -269,7 +366,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "33m",
                 "22m",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
 
         CardList cardList6 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
@@ -283,15 +382,16 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "In Transit",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
                 "2000kg",
                 "20",
                 adminInst,
-                customerInst
-        );
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
         CardList cardList7 = new CardList(R.drawable.hash_key,
                 R.drawable.arrow_point_to_up,
                 R.drawable.flag,
@@ -306,7 +406,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "200KM",
                 "Canceled",
                 "2",
-                "1",
+                "2",
                 "MILANO",
                 "BUCHAREST",
                 "Steal",
@@ -315,7 +415,9 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 "33m",
                 "22m",
                 adminInst,
-                customerInst);
+                customerInst,
+                tripOtherDetails,
+                tripPickDropLocs);
         cardLists.add(cardList1);
         cardLists.add(cardList2);
         cardLists.add(cardList3);
@@ -392,23 +494,6 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         return true;
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_favorite) {
-            Toast.makeText(this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private UserDetails getUserSDetails() {
         Gson gson = new Gson();
         String json = sharedPrefs.getString("UserDetails", null);
@@ -453,7 +538,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
 
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(this, LocationUpdatesBroadcastReceiver.class);
-        intent.setAction(LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES);
+        intent.setAction(ACTION_PROCESS_UPDATES);
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -515,7 +600,7 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
                 Snackbar.make(
-                        findViewById(R.id.activity_main),
+                        findViewById(R.id.drawer_layout),
                         R.string.permission_denied_explanation,
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.settings, new View.OnClickListener() {
@@ -545,5 +630,66 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
         } else if (s.equals(LocationHelper.KEY_LOCATION_UPDATES_REQUESTED)) {
             updateButtonsState(LocationHelper.getRequesting(this));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+
+                if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                    tvNavHeader = findViewById(R.id.tvNavHeader);
+
+                    tvNavHeader.setText(userDetails.getUser_employee_name());
+
+
+                } else {
+                    onBackPressed();
+                }
+                return true;
+
+            case R.id.action_favorite:
+                Toast.makeText(this, "Action clicked", Toast.LENGTH_LONG).show();
+                //noinspection SimplifiableIfStatement
+                return true;
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        menuItem.setChecked(true);
+
+        drawerLayout.closeDrawers();
+
+        int id = menuItem.getItemId();
+
+        switch (id) {
+
+            case R.id.navAccount:
+                Toast.makeText(this,"Account ",Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.navSettings:
+                Toast.makeText(this,"Settings ",Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.navTrips:
+                Toast.makeText(this,"Trip Details ",Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.navLogout:
+                Toast.makeText(this,"Logout ",Toast.LENGTH_LONG).show();
+                break;
+
+        }
+        return true;
+
     }
 }

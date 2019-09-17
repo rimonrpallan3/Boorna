@@ -22,6 +22,16 @@ public class DriverDetails implements Parcelable {
     private String latitude;
     private String longitude;
     private String date_time;
+    /**
+     * error : false
+     * message : Location updated successfully
+     */
+
+    private String error;
+    private String message;
+
+
+
 
     public int getDriver_location_id() {
         return driver_location_id;
@@ -73,6 +83,25 @@ public class DriverDetails implements Parcelable {
     }
 
 
+    public DriverDetails() {
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -86,9 +115,8 @@ public class DriverDetails implements Parcelable {
         dest.writeString(this.latitude);
         dest.writeString(this.longitude);
         dest.writeString(this.date_time);
-    }
-
-    public DriverDetails() {
+        dest.writeString(this.error);
+        dest.writeString(this.message);
     }
 
     protected DriverDetails(Parcel in) {
@@ -98,9 +126,11 @@ public class DriverDetails implements Parcelable {
         this.latitude = in.readString();
         this.longitude = in.readString();
         this.date_time = in.readString();
+        this.error = in.readString();
+        this.message = in.readString();
     }
 
-    public static final Parcelable.Creator<DriverDetails> CREATOR = new Parcelable.Creator<DriverDetails>() {
+    public static final Creator<DriverDetails> CREATOR = new Creator<DriverDetails>() {
         @Override
         public DriverDetails createFromParcel(Parcel source) {
             return new DriverDetails(source);

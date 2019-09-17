@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -26,6 +27,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <!--Update: This is no longer a bug or a workaround,
+         it is required if your app targets API Level 28 (Android 9.0) or above and uses the Google Maps SDK for Android 16.0.0 or below (or if your app uses the Apache HTTP Legacy library).
+          It is now included in the official docs. The public issue has been closed as intended behavior.-->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

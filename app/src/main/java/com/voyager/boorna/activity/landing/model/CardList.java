@@ -3,6 +3,8 @@ package com.voyager.boorna.activity.landing.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class CardList implements Parcelable {
 
     int ivTripCode;
@@ -31,8 +33,10 @@ public class CardList implements Parcelable {
     String tvProductLength;
     String adminInstruction;
     String customerInstruction;
+    ArrayList<TripOtherDetails> tripOtherDetails;
+    ArrayList<TripPickDropLoc> tripPickDropLocs;
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength,String adminInstruction,String customerInstruction) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength,String adminInstruction,String customerInstruction,ArrayList<TripOtherDetails> tripOtherDetails,ArrayList<TripPickDropLoc> tripPickDropLocs) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -57,9 +61,11 @@ public class CardList implements Parcelable {
         this.tvProductLength = tvProductLength;
         this.adminInstruction = adminInstruction;
         this.customerInstruction = customerInstruction;
+        this.tripOtherDetails = tripOtherDetails;
+        this.tripPickDropLocs = tripPickDropLocs;
     }
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductPallets,String adminInstruction,String customerInstruction) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductPallets,String adminInstruction,String customerInstruction,ArrayList<TripOtherDetails> tripOtherDetails,ArrayList<TripPickDropLoc> tripPickDropLocs) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -80,6 +86,25 @@ public class CardList implements Parcelable {
         this.tvProductPallets = tvProductPallets;
         this.adminInstruction = adminInstruction;
         this.customerInstruction = customerInstruction;
+        this.tripOtherDetails = tripOtherDetails;
+        this.tripPickDropLocs = tripPickDropLocs;
+
+    }
+
+    public ArrayList<TripOtherDetails> getTripOtherDetails() {
+        return tripOtherDetails;
+    }
+
+    public void setTripOtherDetails(ArrayList<TripOtherDetails> tripOtherDetails) {
+        this.tripOtherDetails = tripOtherDetails;
+    }
+
+    public ArrayList<TripPickDropLoc> getTripPickDropLocs() {
+        return tripPickDropLocs;
+    }
+
+    public void setTripPickDropLocs(ArrayList<TripPickDropLoc> tripPickDropLocs) {
+        this.tripPickDropLocs = tripPickDropLocs;
     }
 
     public String getAdminInstruction() {
@@ -324,6 +349,8 @@ public class CardList implements Parcelable {
         dest.writeString(this.tvProductLength);
         dest.writeString(this.adminInstruction);
         dest.writeString(this.customerInstruction);
+        dest.writeTypedList(this.tripOtherDetails);
+        dest.writeTypedList(this.tripPickDropLocs);
     }
 
     protected CardList(Parcel in) {
@@ -353,6 +380,8 @@ public class CardList implements Parcelable {
         this.tvProductLength = in.readString();
         this.adminInstruction = in.readString();
         this.customerInstruction = in.readString();
+        this.tripOtherDetails = in.createTypedArrayList(TripOtherDetails.CREATOR);
+        this.tripPickDropLocs = in.createTypedArrayList(TripPickDropLoc.CREATOR);
     }
 
     public static final Creator<CardList> CREATOR = new Creator<CardList>() {

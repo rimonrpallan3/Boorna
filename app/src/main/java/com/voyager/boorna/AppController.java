@@ -72,6 +72,7 @@ public class AppController extends Application {
         //others
         AppConfig.BASE_URL=getResources().getString(R.string.BASE_URL);
         AppConfig.API_KEY=getResources().getString(R.string.api_key);
+        AppConfig.GOOGLE_MAP_API_KEY=getResources().getString(R.string.google_maps_key);
 
     }
 

@@ -14,6 +14,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
@@ -30,6 +32,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.voyager.boorna.R;
 
@@ -85,6 +88,15 @@ public class Helper {
                 = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static Drawable changeDrawableIconMap(Context context, int resId){
+
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), resId,null);
+        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
+        drawable.setColorFilter(ResourcesCompat.getColor(context.getResources(),R.color.colorPrimary,null),mode);
+
+        return drawable;
     }
 
     public static String getDeviceIMEI(Context context) {
