@@ -1,31 +1,121 @@
 package com.voyager.boorna.activity.TripDetail;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.landing.model.CardList;
 
-public class TripDetailActivity extends FragmentActivity implements OnMapReadyCallback {
+public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     MapView mvTripDetail;
+    Toolbar tbTripDetail;
+
+    AppCompatImageView ivTripDist;
+    AppCompatTextView tvTripDist;
+    AppCompatTextView tvTripCollection;
+    AppCompatTextView tvTripDrops;
+    AppCompatTextView tvTripCat;
+    AppCompatTextView tvTripWeight;
+    AppCompatTextView tvTripProductWidth;
+    AppCompatTextView tvTripProductLength;
+    AppCompatTextView tvTripProductHeight;
+    AppCompatTextView tvTripPallet;
+    AppCompatTextView tvTripPalletHeight;
+    AppCompatTextView tvAdminInst;
+    AppCompatTextView tvCustomerInst;
+    AppCompatButton btnTripAccept;
+    AppCompatButton btnTripReject;
+
+    LinearLayout llTripPallet;
+    LinearLayout llTripWHL;
+
+    RecyclerView rvTripTravelDetails;
+    RecyclerView rvTripOtherDetails;
+
+    CardList cardList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_detail);
+        Intent intent = getIntent();
+        tbTripDetail = findViewById(R.id.tbTripDetail);
+        tbTripDetail.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(tbTripDetail);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mvTripDetail = findViewById(R.id.mvTripDetail);
+        llTripPallet = findViewById(R.id.llTripPallet);
+        llTripWHL = findViewById(R.id.llTripWHL);
+        ivTripDist = findViewById(R.id.ivTripDist);
+        tvTripDist = findViewById(R.id.tvTripDist);
+        tvTripCollection = findViewById(R.id.tvTripCollection);
+        tvTripDrops = findViewById(R.id.tvTripDrops);
+        tvTripCat = findViewById(R.id.tvTripCat);
+        tvTripWeight = findViewById(R.id.tvTripWeight);
+        tvTripProductWidth = findViewById(R.id.tvTripProductWidth);
+        tvTripProductLength = findViewById(R.id.tvTripProductLength);
+        tvTripProductHeight = findViewById(R.id.tvTripProductHeight);
+        tvTripPallet = findViewById(R.id.tvTripPallet);
+        tvTripPalletHeight = findViewById(R.id.tvTripPalletHeight);
+        tvAdminInst = findViewById(R.id.tvAdminInst);
+        tvCustomerInst = findViewById(R.id.tvCustomerInst);
+        btnTripAccept = findViewById(R.id.btnTripAccept);
+        btnTripReject = findViewById(R.id.btnTripReject);
+        rvTripTravelDetails = findViewById(R.id.rvTripTravelDetails);
+        rvTripOtherDetails = findViewById(R.id.rvTripOtherDetails);
+
         mvTripDetail.onCreate(savedInstanceState);
         mvTripDetail.getMapAsync(this);
+
+        cardList = intent.getParcelableExtra("CardList");
+        if (cardList != null) {
+            if(cardList.getTvProductPallets()!=null) {
+                llTripWHL.setVisibility(View.GONE);
+            }else {
+                llTripPallet.setVisibility(View.GONE);
+            }
+            tvTripDist.setText(cardList.getTvTripTotDistance());
+            tvTripCollection.setText(cardList.getTvLoadCnt());
+            tvTripDrops.setText(cardList.getTvUnLoadCnt());
+            tvTripCat.setText(cardList.getTvProductName());
+            tvTripPallet.setText(cardList.getTvProductPallets());
+            tvTripPalletHeight.setText("210cm");
+            tvTripWeight.setText(cardList.getTvProductWeight());
+            tvTripProductWidth.setText(cardList.getTvProductWidth());
+            tvTripProductLength.setText(cardList.getTvProductLength());
+            tvTripProductHeight.setText(cardList.getTvProductHeight());
+            tvAdminInst.setText(cardList.getAdminInstruction());
+            tvCustomerInst.setText(cardList.getCustomerInstruction());
+        } else {
+        }
+
+
+        tbTripDetail.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                //What to do on back clicked
+            }
+        });
     }
 
 

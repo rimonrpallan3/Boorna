@@ -47,4 +47,50 @@
     <string name="default_channel">Default channel</string>
     <string name="title_activity_trip_detail">Map</string>
 
+
+
+
+    <string name="customer_instruction">Any instructions given by an account holder (called hereinafter “Customer”) of Standard Chartered Bank Nepal Limited (called hereinafter “Bank”) to the Bank to stop payment of
+any cheque(s), bearing the details provided overleaf, issued under the signature of the Customer and presented to the Bank for encashment (the “instructions”) shall be subject
+to the terms and conditions set out hereunder.
+The Bank, its successors, assigns, officers and employees, shall not be in any manner responsible for any actions, suits, proceedings, damages, costs, claims, demands,
+expenses, losses and liabilitieswhatsoever suffered, incurred or sustained by the Customer at any point in time by result of or in respect of or as a result of the Bank acting in
+accordance with the Instructions.
+The Customer hereby confirms that the cheque(s) bearing the details mentioned overleaf (the “Cheques(s) have been stolen from the Customer or have been lost and or misplaced
+by the Customer.
+In the event that the Cheques(s) are encased by the Bank on presentation thereof despite receiving the instructions from the Customer through inadvertence or oversight, the
+Bank will not be held responsible in any manner by the Customer for any consequences whatsoever arising there from, provided the Bank has acted in good faith and has
+followed the Bank’s usual procedures for handling the instructions.
+The Customer undertakes to immediately deliver to the Bank the Cheques(s) that have been reported as stolen, Lost and/or misplaced by the Customer to the Bank, in event
+that such Cheque(s), are subsequently found by or come into the possession of the Customer. If such Cheque(s) are subsequently found by the Customer or come into the
+possession of the Customer, the Customer confirms that (i) no claims will be made by the payees of the Cheque(s) on the Bank (ii) that the Cheque(s) cannot and will not be
+used by the Customer and (iii) that the Cheque(s) were not received by or endorsed by any third party.
+The Bank may at its sole discretion, debit the account of the Customer with the amount(s) of the Cheque(s) reported as stolen, lost or misplaced by the Customer, and hold
+such amount(s) in any suspense of other account for such period as it may deem fit. The Bank may also apply such amount(s) forthwith in any manner, it deems fit without any
+notice to the Customer.
+The Customer confirms that the Instructions are given by the Customer in good faith and not in any attempt to deny or defeat any lawful obligation or debt of the Customer to
+the Bank.
+The Bank is authorised to charge a fee as per the Bank’s schedule of charges, as revised from time, for the services performed by the Bank pursuant to the Instructions.</string>
+    <string name="admin_instruction">Any instructions given by an account holder (called hereinafter “Customer”) of Standard Chartered Bank Nepal Limited (called hereinafter “Bank”) to the Bank to stop payment of
+any cheque(s), bearing the details provided overleaf, issued under the signature of the Customer and presented to the Bank for encashment (the “instructions”) shall be subject
+to the terms and conditions set out hereunder.
+The Bank, its successors, assigns, officers and employees, shall not be in any manner responsible for any actions, suits, proceedings, damages, costs, claims, demands,
+expenses, losses and liabilitieswhatsoever suffered, incurred or sustained by the Customer at any point in time by result of or in respect of or as a result of the Bank acting in
+accordance with the Instructions.
+The Customer hereby confirms that the cheque(s) bearing the details mentioned overleaf (the “Cheques(s) have been stolen from the Customer or have been lost and or misplaced
+by the Customer.
+In the event that the Cheques(s) are encased by the Bank on presentation thereof despite receiving the instructions from the Customer through inadvertence or oversight, the
+Bank will not be held responsible in any manner by the Customer for any consequences whatsoever arising there from, provided the Bank has acted in good faith and has
+followed the Bank’s usual procedures for handling the instructions.
+The Customer undertakes to immediately deliver to the Bank the Cheques(s) that have been reported as stolen, Lost and/or misplaced by the Customer to the Bank, in event
+that such Cheque(s), are subsequently found by or come into the possession of the Customer. If such Cheque(s) are subsequently found by the Customer or come into the
+possession of the Customer, the Customer confirms that (i) no claims will be made by the payees of the Cheque(s) on the Bank (ii) that the Cheque(s) cannot and will not be
+used by the Customer and (iii) that the Cheque(s) were not received by or endorsed by any third party.
+The Bank may at its sole discretion, debit the account of the Customer with the amount(s) of the Cheque(s) reported as stolen, lost or misplaced by the Customer, and hold
+such amount(s) in any suspense of other account for such period as it may deem fit. The Bank may also apply such amount(s) forthwith in any manner, it deems fit without any
+notice to the Customer.
+The Customer confirms that the Instructions are given by the Customer in good faith and not in any attempt to deny or defeat any lawful obligation or debt of the Customer to
+the Bank.
+The Bank is authorised to charge a fee as per the Bank’s schedule of charges, as revised from time, for the services performed by the Bank pursuant to the Instructions.</string>
+
 </resources>

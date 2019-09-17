@@ -11,15 +11,15 @@
     <string name="BASE_URL">http://api.boorna.com/</string>
 
     <!-- DEFAULT HOST -->
-    <string name="DEFAULT_HOST">www.apixu.com</string>
-    <string name="google_maps_key">AIzaSyAdr9nOp2NZqX3j9AbBGf-xipMNrVzhBak</string>
+    <string name="DEFAULT_HOST"></string>
+    <string name="google_maps_key">AIzaSyBWd66E7i_Uf7a-F5B5nH2Mc6mqM34SLas</string>
 
 
     <!-- APP DESIGN -->
     <!-- Set your theme color  -->
     <item type="color" name="colorPrimary">#e3af12</item>
-    <item type="color" name="colorAccent">#b7b6b4</item>
-    <item type="color" name="colorPrimaryDark">#000000</item>
+    <item type="color" name="colorAccent">#000000</item>
+    <item type="color" name="colorPrimaryDark">#343a40</item>
     <item type="color" name="colorPromo">#25323f</item>
     <item type="color" name="iconColor">#fdd14c</item>
     <item type="color" name="iconDisableColor">#c6c6c6</item>

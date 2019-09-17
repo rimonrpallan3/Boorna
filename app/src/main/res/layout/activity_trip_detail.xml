@@ -2,11 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        style="@style/HeaderBar"
+        android:id="@+id/tbTripDetail"
+        android:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Trip Detail"
+        app:titleTextColor="@color/white"
+        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp">
@@ -54,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_04"
-                        android:src="@android:drawable/stat_sys_vp_phone_call" />
+                        android:src="@drawable/distance" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvTripDist"
@@ -135,6 +139,7 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTripTravelDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -164,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_04"
                         android:layout_marginLeft="@dimen/_20"
-                        android:src="@android:drawable/stat_sys_vp_phone_call" />
+                        android:src="@drawable/category" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvTripCat"
@@ -191,7 +196,6 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivTripWeight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_04"
@@ -215,6 +219,7 @@
                 android:background="@color/_10" />
 
             <LinearLayout
+                android:id="@+id/llTripWHL"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50"
                 android:orientation="horizontal"
@@ -330,7 +335,7 @@
                         android:text="Height" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvTripHeight"
+                        android:id="@+id/tvTripProductHeight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="210" />
@@ -356,8 +361,8 @@
                 android:background="@color/_10" />
 
 
-
             <LinearLayout
+                android:id="@+id/llTripPallet"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50"
                 android:orientation="horizontal"
@@ -425,7 +430,96 @@
                 android:layout_height="1dp"
                 android:background="@color/_10" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10"
+                    android:textStyle="bold"
+                    android:text="Other Details :"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTripOtherDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10"
+                android:background="@color/cell_gray"
+                app:titleTextColor="@color/white"
+                app:title="Instruction of Admin and Customer"
+                android:elevation="@dimen/_04"
+                android:visibility="visible" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_marginTop="@dimen/_10"
+                android:layout_marginRight="@dimen/_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Admin Instruction"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAdminInst"
+                android:layout_marginRight="@dimen/_22"
+                android:layout_marginTop="@dimen/_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_marginTop="@dimen/_10"
+                android:layout_marginRight="@dimen/_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Customer Instruction"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_marginTop="@dimen/_10"
+                android:layout_marginRight="@dimen/_22"
+                android:id="@+id/tvCustomerInst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/_10"
+                android:layout_marginBottom="@dimen/_22"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnTripAccept"
+                android:layout_marginBottom="@dimen/_20"
+                android:layout_marginLeft="@dimen/_22"
+                android:layout_marginRight="@dimen/_22"
+                android:background="@drawable/rectangle_green_button"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Accept"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnTripReject"
+                android:background="@drawable/rectangle_red_button"
+                android:layout_marginBottom="@dimen/_20"
+                android:layout_marginLeft="@dimen/_22"
+                android:layout_marginRight="@dimen/_22"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="Reject"/>
 
 
         </LinearLayout>

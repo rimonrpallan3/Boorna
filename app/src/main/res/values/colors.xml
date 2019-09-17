@@ -8,7 +8,7 @@
     <color name="layout_error_color">#ff888c</color>
 
     <!--Landing Page-->
-    <color name="cell_gray">#343a40</color>
+    <color name="cell_gray">#f0f0f0</color>
 
 
     <color name="white">#FFF</color>

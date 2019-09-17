@@ -53,6 +53,8 @@ public class UserDetails implements IUserDetials, Parcelable {
 
 
 
+
+
     private String franchise_id;
     private int user_id;
     private String company_name;
@@ -112,6 +114,11 @@ public class UserDetails implements IUserDetials, Parcelable {
     private String scripts_facepixel;
     private String scripts_tawk;
     private String boorna_vatrate_applied;
+    /**
+     * api_google_key : AIzaSyBWd66E7i_Uf7a-F5B5nH2Mc6mqM34SLas
+     */
+
+    private String api_google_key;
 
 
     public String getFcm() {
@@ -460,6 +467,56 @@ public class UserDetails implements IUserDetials, Parcelable {
     }
 
 
+
+    public String getHomepage_picture() {
+        return homepage_picture;
+    }
+
+    public void setHomepage_picture(String homepage_picture) {
+        this.homepage_picture = homepage_picture;
+    }
+
+    public String getScripts_ganalytics() {
+        return scripts_ganalytics;
+    }
+
+    public void setScripts_ganalytics(String scripts_ganalytics) {
+        this.scripts_ganalytics = scripts_ganalytics;
+    }
+
+    public String getScripts_facepixel() {
+        return scripts_facepixel;
+    }
+
+    public void setScripts_facepixel(String scripts_facepixel) {
+        this.scripts_facepixel = scripts_facepixel;
+    }
+
+    public String getScripts_tawk() {
+        return scripts_tawk;
+    }
+
+    public void setScripts_tawk(String scripts_tawk) {
+        this.scripts_tawk = scripts_tawk;
+    }
+
+    public String getBoorna_vatrate_applied() {
+        return boorna_vatrate_applied;
+    }
+
+    public void setBoorna_vatrate_applied(String boorna_vatrate_applied) {
+        this.boorna_vatrate_applied = boorna_vatrate_applied;
+    }
+
+    public String getApi_google_key() {
+        return api_google_key;
+    }
+
+    public void setApi_google_key(String api_google_key) {
+        this.api_google_key = api_google_key;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -507,6 +564,12 @@ public class UserDetails implements IUserDetials, Parcelable {
         dest.writeString(this.message);
         dest.writeInt(this.vehicle_id);
         dest.writeString(this.user_email);
+        dest.writeString(this.homepage_picture);
+        dest.writeString(this.scripts_ganalytics);
+        dest.writeString(this.scripts_facepixel);
+        dest.writeString(this.scripts_tawk);
+        dest.writeString(this.boorna_vatrate_applied);
+        dest.writeString(this.api_google_key);
     }
 
     protected UserDetails(Parcel in) {
@@ -550,6 +613,12 @@ public class UserDetails implements IUserDetials, Parcelable {
         this.message = in.readString();
         this.vehicle_id = in.readInt();
         this.user_email = in.readString();
+        this.homepage_picture = in.readString();
+        this.scripts_ganalytics = in.readString();
+        this.scripts_facepixel = in.readString();
+        this.scripts_tawk = in.readString();
+        this.boorna_vatrate_applied = in.readString();
+        this.api_google_key = in.readString();
     }
 
     public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
@@ -563,44 +632,4 @@ public class UserDetails implements IUserDetials, Parcelable {
             return new UserDetails[size];
         }
     };
-
-    public String getHomepage_picture() {
-        return homepage_picture;
-    }
-
-    public void setHomepage_picture(String homepage_picture) {
-        this.homepage_picture = homepage_picture;
-    }
-
-    public String getScripts_ganalytics() {
-        return scripts_ganalytics;
-    }
-
-    public void setScripts_ganalytics(String scripts_ganalytics) {
-        this.scripts_ganalytics = scripts_ganalytics;
-    }
-
-    public String getScripts_facepixel() {
-        return scripts_facepixel;
-    }
-
-    public void setScripts_facepixel(String scripts_facepixel) {
-        this.scripts_facepixel = scripts_facepixel;
-    }
-
-    public String getScripts_tawk() {
-        return scripts_tawk;
-    }
-
-    public void setScripts_tawk(String scripts_tawk) {
-        this.scripts_tawk = scripts_tawk;
-    }
-
-    public String getBoorna_vatrate_applied() {
-        return boorna_vatrate_applied;
-    }
-
-    public void setBoorna_vatrate_applied(String boorna_vatrate_applied) {
-        this.boorna_vatrate_applied = boorna_vatrate_applied;
-    }
 }

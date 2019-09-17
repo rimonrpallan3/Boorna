@@ -135,11 +135,16 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12"
+                        android:text="Collections: "/>
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvLoadCnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_12"
-                        android:text="Loaded"/>
+                        android:text="2"/>
 
                 </LinearLayout>
 
@@ -152,12 +157,18 @@
 
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvUnLoadCnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10"
                         android:textSize="@dimen/_12"
-                        android:text="UnLoaded" />
+                        android:text="DropOff: " />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvUnLoadCnt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12"
+                        android:text="1"/>
 
                 </LinearLayout>
 
@@ -224,7 +235,7 @@
 
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvProductLoad"
+                        android:id="@+id/tvProductName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10"

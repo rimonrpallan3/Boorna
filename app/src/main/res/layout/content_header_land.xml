@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="horizontal"
     android:layout_marginLeft="@dimen/_08"
     android:weightSum="100">
@@ -10,6 +11,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_weight="33.33"
         android:orientation="horizontal">
 
@@ -17,11 +19,13 @@
             android:id="@+id/ivTripCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginRight="@dimen/_04"
             android:src="@android:drawable/stat_sys_vp_phone_call" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTripCode"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1234">
@@ -39,16 +43,24 @@
 
     </androidx.appcompat.widget.AppCompatTextView>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTripStatus"
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="33.33"
         android:gravity="right"
-        android:paddingRight="@dimen/_10"
-        android:text="Status">
+        android:layout_gravity="center"
+        android:paddingRight="@dimen/_10">
 
-    </androidx.appcompat.widget.AppCompatTextView>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTripStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Status"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>

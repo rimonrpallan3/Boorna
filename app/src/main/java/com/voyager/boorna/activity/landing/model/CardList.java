@@ -23,14 +23,16 @@ public class CardList implements Parcelable {
     String tvUnLoadCnt ;
     String tvToPlace;
     String tvFromPlace;
-    String tvProductLoad;
+    String tvProductName;
     String tvProductWeight;
     String tvProductPallets;
     String tvProductHeight;
     String tvProductWidth;
     String tvProductLength;
+    String adminInstruction;
+    String customerInstruction;
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductHeight, int ivProductWidth, int ivProductLength, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductHeight, String tvProductWidth, String tvProductLength,String adminInstruction,String customerInstruction) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -48,14 +50,16 @@ public class CardList implements Parcelable {
         this.tvUnLoadCnt = tvUnLoadCnt;
         this.tvToPlace = tvToPlace;
         this.tvFromPlace = tvFromPlace;
-        this.tvProductLoad = tvProductLoad;
+        this.tvProductName = tvProductName;
         this.tvProductWeight = tvProductWeight;
         this.tvProductHeight = tvProductHeight;
         this.tvProductWidth = tvProductWidth;
         this.tvProductLength = tvProductLength;
+        this.adminInstruction = adminInstruction;
+        this.customerInstruction = customerInstruction;
     }
 
-    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductLoad, String tvProductWeight, String tvProductPallets) {
+    public CardList(int ivTripCode, int ivFrom, int ivFromFlag, int ivTo, int ivToFlag, int ivProductLoad, int ivProductWeight, int ivProductPallets, String tvTripCode, String tvTripTotDistance, String tvTripStatus, String tvLoadCnt, String tvUnLoadCnt, String tvToPlace, String tvFromPlace, String tvProductName, String tvProductWeight, String tvProductPallets,String adminInstruction,String customerInstruction) {
         this.ivTripCode = ivTripCode;
         this.ivFrom = ivFrom;
         this.ivFromFlag = ivFromFlag;
@@ -71,9 +75,27 @@ public class CardList implements Parcelable {
         this.tvUnLoadCnt = tvUnLoadCnt;
         this.tvToPlace = tvToPlace;
         this.tvFromPlace = tvFromPlace;
-        this.tvProductLoad = tvProductLoad;
+        this.tvProductName = tvProductName;
         this.tvProductWeight = tvProductWeight;
         this.tvProductPallets = tvProductPallets;
+        this.adminInstruction = adminInstruction;
+        this.customerInstruction = customerInstruction;
+    }
+
+    public String getAdminInstruction() {
+        return adminInstruction;
+    }
+
+    public void setAdminInstruction(String adminInstruction) {
+        this.adminInstruction = adminInstruction;
+    }
+
+    public String getCustomerInstruction() {
+        return customerInstruction;
+    }
+
+    public void setCustomerInstruction(String customerInstruction) {
+        this.customerInstruction = customerInstruction;
     }
 
     public int getIvTripCode() {
@@ -220,12 +242,12 @@ public class CardList implements Parcelable {
         this.tvFromPlace = tvFromPlace;
     }
 
-    public String getTvProductLoad() {
-        return tvProductLoad;
+    public String getTvProductName() {
+        return tvProductName;
     }
 
-    public void setTvProductLoad(String tvProductLoad) {
-        this.tvProductLoad = tvProductLoad;
+    public void setTvProductName(String tvProductName) {
+        this.tvProductName = tvProductName;
     }
 
     public String getTvProductWeight() {
@@ -294,15 +316,14 @@ public class CardList implements Parcelable {
         dest.writeString(this.tvUnLoadCnt);
         dest.writeString(this.tvToPlace);
         dest.writeString(this.tvFromPlace);
-        dest.writeString(this.tvProductLoad);
+        dest.writeString(this.tvProductName);
         dest.writeString(this.tvProductWeight);
         dest.writeString(this.tvProductPallets);
         dest.writeString(this.tvProductHeight);
         dest.writeString(this.tvProductWidth);
         dest.writeString(this.tvProductLength);
-    }
-
-    public CardList() {
+        dest.writeString(this.adminInstruction);
+        dest.writeString(this.customerInstruction);
     }
 
     protected CardList(Parcel in) {
@@ -324,15 +345,17 @@ public class CardList implements Parcelable {
         this.tvUnLoadCnt = in.readString();
         this.tvToPlace = in.readString();
         this.tvFromPlace = in.readString();
-        this.tvProductLoad = in.readString();
+        this.tvProductName = in.readString();
         this.tvProductWeight = in.readString();
         this.tvProductPallets = in.readString();
         this.tvProductHeight = in.readString();
         this.tvProductWidth = in.readString();
         this.tvProductLength = in.readString();
+        this.adminInstruction = in.readString();
+        this.customerInstruction = in.readString();
     }
 
-    public static final Parcelable.Creator<CardList> CREATOR = new Parcelable.Creator<CardList>() {
+    public static final Creator<CardList> CREATOR = new Creator<CardList>() {
         @Override
         public CardList createFromParcel(Parcel source) {
             return new CardList(source);

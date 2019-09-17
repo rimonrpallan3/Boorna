@@ -51,7 +51,8 @@
         <activity
             android:name=".activity.landing.LandingActivity_v1"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.login.LoginActivity">
+        <activity android:name=".activity.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

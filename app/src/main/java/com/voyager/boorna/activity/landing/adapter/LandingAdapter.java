@@ -1,11 +1,14 @@
 package com.voyager.boorna.activity.landing.adapter;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.voyager.boorna.R;
+import com.voyager.boorna.activity.TripDetail.TripDetailActivity;
 import com.voyager.boorna.activity.landing.model.CardList;
 
 import java.util.ArrayList;
@@ -37,13 +40,13 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull LandingAdapter.ViewHolder holder, int position) {
-        CardList cardList = cardLists.get(position);
+        final CardList cardList = cardLists.get(position);
+        int colorWhite = holder.cvCell.getContext().getResources().getColor(R.color.white);
+        int colorGrey = holder.cvCell.getContext().getResources().getColor(R.color.cell_gray);
         if(position %2 == 1)
         {
-            int colorWhite = holder.cvCell.getContext().getResources().getColor(R.color.white);
             holder.cvCell.setCardBackgroundColor(colorWhite);
         } else {
-            int colorGrey = holder.cvCell.getContext().getResources().getColor(R.color.cell_gray);
             holder.cvCell.setCardBackgroundColor(colorGrey);
         }
         /*int color = holder.cvCell.getContext().getResources().getColor(getColorCode());
@@ -63,8 +66,20 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
         holder.tvFromPlace.setText(cardList.getTvFromPlace());
         holder.tvLoadCnt.setText(cardList.getTvLoadCnt());
         holder.tvUnLoadCnt.setText(cardList.getTvUnLoadCnt());
-        holder.tvProductLoad.setText(cardList.getTvProductLoad());
+        holder.tvProductName.setText(cardList.getTvProductName());
         holder.tvProductWeight.setText(cardList.getTvProductWeight());
+        Drawable colorRed = holder.cvCell.getContext().getResources().getDrawable(R.drawable.box_red_text_view);
+        Drawable colorGreen = holder.cvCell.getContext().getResources().getDrawable(R.drawable.box_green_text_view);
+        Drawable colorYellow = holder.cvCell.getContext().getResources().getDrawable(R.drawable.box_yellow_text_view);
+        if(cardList.getTvTripStatus().equals("Canceled")){
+            holder.tvTripStatus.setBackgroundDrawable(colorRed);
+            holder.tvTripStatus.setTextColor(colorWhite);
+        }else if(cardList.getTvTripStatus().equals("In Transit")){
+            holder.tvTripStatus.setBackgroundDrawable(colorYellow);
+        }else if(cardList.getTvTripStatus().equals("Delivered")){
+            holder.tvTripStatus.setBackgroundDrawable(colorGreen);
+            holder.tvTripStatus.setTextColor(colorWhite);
+        }
         if(cardList.getTvProductPallets()!=null) {
             holder.llProductWidth.setVisibility(View.GONE);
             holder.llProductHeight.setVisibility(View.GONE);
@@ -80,6 +95,15 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
             holder.ivProductLength.setImageResource(cardList.getIvProductLength());
             holder.ivProductHeight.setImageResource(cardList.getIvProductHeight());
         }
+
+        holder.cvCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), TripDetailActivity.class);
+                intent.putExtra("CardList", cardList);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -127,7 +151,7 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
         AppCompatTextView tvTripStatus;
         AppCompatTextView tvLoadCnt;
         AppCompatTextView tvUnLoadCnt;
-        AppCompatTextView tvProductLoad;
+        AppCompatTextView tvProductName;
         AppCompatTextView tvProductWeight;
         AppCompatTextView tvProductPallets;
         AppCompatTextView tvProductHeight;
@@ -165,7 +189,7 @@ public class LandingAdapter extends RecyclerView.Adapter<LandingAdapter.ViewHold
             ivToFlag = view.findViewById(R.id.ivToFlag);
             tvLoadCnt = view.findViewById(R.id.tvLoadCnt);
             tvUnLoadCnt = view.findViewById(R.id.tvUnLoadCnt);
-            tvProductLoad = view.findViewById(R.id.tvProductLoad);
+            tvProductName = view.findViewById(R.id.tvProductName);
             tvProductWeight = view.findViewById(R.id.tvProductWeight);
             tvProductPallets = view.findViewById(R.id.tvProductPallets);
             tvProductHeight = view.findViewById(R.id.tvProductHeight);
