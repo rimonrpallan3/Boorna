@@ -19,6 +19,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,11 +28,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mvTripDetail"
+            <fragment
+                android:tag="fragment_map"
+                android:id="@+id/fragment_map"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200" />
+                android:layout_height="@dimen/_400"
+                class="com.voyager.boorna.activity.TripDetail.helper.WorkaroundMapFragment"/>
 
             <View
                 android:layout_width="match_parent"
