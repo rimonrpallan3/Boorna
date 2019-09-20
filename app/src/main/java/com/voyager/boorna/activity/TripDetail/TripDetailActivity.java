@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,7 @@ import com.google.gson.Gson;
 import com.voyager.boorna.R;
 import com.voyager.boorna.activity.TripDetail.adapter.TripOtherDetailsAdapter;
 import com.voyager.boorna.activity.TripDetail.adapter.TripPickDropLocAdapter;
+import com.voyager.boorna.activity.TripDetail.helper.WorkaroundMapFragment;
 import com.voyager.boorna.activity.landing.model.CardList;
 import com.voyager.boorna.activity.landing.model.TripOtherDetails;
 import com.voyager.boorna.activity.landing.model.TripPickDropLoc;
@@ -44,7 +46,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         GoogleMap.OnPolygonClickListener{
     private static final String TAG = TripDetailActivity.class.getSimpleName();
     private GoogleMap mMap;
-    MapView mvTripDetail;
     Toolbar tbTripDetail;
 
     AppCompatImageView ivTripDist;
@@ -83,6 +84,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     LatLng dropPosition;
 
     CardList cardList;
+    NestedScrollView nsvMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_trip_detail);
         Intent intent = getIntent();
         tbTripDetail = findViewById(R.id.tbTripDetail);
+        nsvMain = findViewById(R.id.nsvMain);
         tbTripDetail.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(tbTripDetail);
         pickPosition = new LatLng(44.4268, 26.1025);
@@ -99,7 +102,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mvTripDetail = findViewById(R.id.mvTripDetail);
+
         llTripPallet = findViewById(R.id.llTripPallet);
         llTripWHL = findViewById(R.id.llTripWHL);
         ivTripDist = findViewById(R.id.ivTripDist);
@@ -120,8 +123,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         rvTripTravelDetails = findViewById(R.id.rvTripTravelDetails);
         rvTripOtherDetails = findViewById(R.id.rvTripOtherDetails);
 
-        mvTripDetail.onCreate(savedInstanceState);
-        mvTripDetail.getMapAsync(this);
 
         cardList = intent.getParcelableExtra("CardList");
         if (cardList != null) {
@@ -146,6 +147,16 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             tripOtherList(cardList.getTripOtherDetails());
         } else {
         }
+
+        ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map)).getMapAsync(this);
+
+        ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map)).setListener(new WorkaroundMapFragment.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                nsvMain.requestDisallowInterceptTouchEvent(true);
+            }
+        });
+
 
 
         tbTripDetail.setNavigationOnClickListener(new View.OnClickListener() {
@@ -230,36 +241,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mvTripDetail.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mvTripDetail.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mvTripDetail.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mvTripDetail.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mvTripDetail.onLowMemory();
-    }
 
     @Override
     public void onPolygonClick(Polygon polygon) {
