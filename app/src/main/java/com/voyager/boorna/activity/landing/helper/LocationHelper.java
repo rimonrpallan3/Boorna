@@ -32,6 +32,8 @@ import java.util.List;
 public class LocationHelper {
     public static final String KEY_LOCATION_UPDATES_REQUESTED = "location-updates-requested";
     public static final String KEY_LOCATION_UPDATES_RESULT = "location-update-result";
+    public static final String KEY_USER_UPDATES_REQUESTED = "user-updates-requested";
+    public static final String KEY_USER_UPDATES_RESULT = "user-update-result";
     public static final String USER_ID = "USER_ID";
     public static final String LEVEL_CODE = "LEVEL_CODE";
     public static final String VEHICLE_ID = "VEHICLE_ID";
@@ -90,6 +92,14 @@ public class LocationHelper {
                 .getString(KEY_LOCATION_UPDATES_RESULT, "");
     }
 
+    /**
+     * Fetches location results from {@link android.content.SharedPreferences}.
+     */
+    public static String getUserResult(Context context) {
+        return androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(KEY_USER_UPDATES_RESULT, "");
+    }
+
 
 
     /**
@@ -102,31 +112,16 @@ public class LocationHelper {
                         getLocationResultText())
                 .apply();
     }
-    public void saveUserResult(Context context,int userID,String getLevel_code,int vehicleId) {
-        androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putInt(USER_ID, userID)
-                .putString(LEVEL_CODE, getLevel_code)
-                .putInt(VEHICLE_ID, vehicleId)
-                .apply();
-    }
+
 
     /**
-     * Fetches location results from {@link android.content.SharedPreferences}.
+     * Saves location result as a string to {@link android.content.SharedPreferences}.
      */
-    public static UserDetails getSavedUserResult(Context context) {
-        UserDetails userDetails = new UserDetails();
-        int userID = 0;
-        String getLevel_code = "";
-        int vehicleId = 0;
-        PreferenceManager preferenceManager = (PreferenceManager) PreferenceManager.getDefaultSharedPreferences(context);
-        preferenceManager.getPreferenceDataStore().getInt(USER_ID, userID);
-        preferenceManager.getPreferenceDataStore().getString(LEVEL_CODE, getLevel_code);
-        preferenceManager.getPreferenceDataStore().getInt(VEHICLE_ID, vehicleId);
-        userDetails.setUser_id(userID);
-        userDetails.setLevel_code(getLevel_code);
-        userDetails.setVehicle_id(vehicleId);
-        return userDetails;
+   public void saveUserResults(String userDetails, Context context) {
+        androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(KEY_USER_UPDATES_RESULT, userDetails)
+                .apply();
     }
 
 
@@ -198,6 +193,18 @@ public class LocationHelper {
     public static boolean getRequesting(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(KEY_LOCATION_UPDATES_REQUESTED, false);
+    }
+
+    public static void setUserRequesting(Context context, boolean value) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(KEY_USER_UPDATES_REQUESTED, value)
+                .apply();
+    }
+
+    public static boolean getUserRequesting(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(KEY_USER_UPDATES_REQUESTED, false);
     }
 
     /**

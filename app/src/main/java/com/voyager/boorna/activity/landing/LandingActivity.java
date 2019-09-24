@@ -141,22 +141,29 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
             getLevel_code = userDetails.getLevel_code();
             vehicleId = userDetails.getVehicle_id();
             //tvNavHeader.setText(userDetails.getUser_employee_name());
-            LocationUpdatesBroadcastReceiver.userID = userDetails.getUser_id();
-            LocationUpdatesBroadcastReceiver.getLevel_code = userDetails.getLevel_code();
-            LocationUpdatesBroadcastReceiver.vehicleId = userDetails.getVehicle_id();
             System.out.println(TAG+" -- UserDetail- email : " + userDetails.getEmail());
             System.out.println(TAG+" -- UserDetail- userID : " + userDetails.getUser_id());
             System.out.println(TAG+" -- UserDetail- LevelCode : " + userDetails.getLevel_code());
             System.out.println(TAG+" -- UserDetail- fcm : " + userDetails.getFcm());
             System.out.println(TAG+" -- UserDetail- vehicleId : " + userDetails.getVehicle_id());
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(userDetails);
+            LocationHelper.getUserRequesting(this);
+            LocationHelper locationResultHelper = new LocationHelper();
+            // Save the location data to SharedPreferences.
+            locationResultHelper.saveUserResults(jsonString,this);
         } else {
             userDetails = getUserSDetails();
             userID = userDetails.getUser_id();
             getLevel_code = userDetails.getLevel_code();
             vehicleId = userDetails.getVehicle_id();
-            LocationUpdatesBroadcastReceiver.userID = userDetails.getUser_id();
-            LocationUpdatesBroadcastReceiver.getLevel_code = userDetails.getLevel_code();
-            LocationUpdatesBroadcastReceiver.vehicleId = userDetails.getVehicle_id();
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(userDetails);
+            LocationHelper.getUserRequesting(this);
+            LocationHelper locationResultHelper = new LocationHelper();
+            // Save the location data to SharedPreferences.
+            locationResultHelper.saveUserResults(jsonString,this);
+
         }
 
         createLocationRequest();
@@ -166,15 +173,6 @@ public class LandingActivity extends AppCompatActivity implements ILandingView ,
             requestLocationUpdates();
         }
         orderVerticalList();
-        intent = new Intent();
-        intent.setAction(ACTION_PROCESS_UPDATES);
-        Bundle b = new Bundle();
-        b.putInt("userID", userID);
-        b.putString("getLevel_code", getLevel_code);
-        b.putInt("vehicleId", vehicleId);
-        intent.putExtras(b);
-        sendBroadcast(intent);
-
 
     }
 

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -64,9 +65,9 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     ".PROCESS_UPDATES";
     SharedPreferences sharedPrefs;
     UserDetails userDetails;
-    public static  Integer userID = 0;
-    public static  String getLevel_code = "";
-    public static  Integer vehicleId = 0;
+    public   Integer userID = 0;
+    public   String getLevel_code = "";
+    public   Integer vehicleId = 0;
 
 
     @Override
@@ -76,20 +77,19 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
             if (ACTION_PROCESS_UPDATES.equals(action)) {
                 LocationResult result = LocationResult.extractResult(intent);
                 if (result != null) {
-                    Integer userID2 = 0;
-                    String getLevel_code2 = "";
-                    Integer vehicleId2 = 0;
-                    userID2 = intent.getIntExtra("userID",0);
-                    getLevel_code2= intent.getStringExtra("userID");
-                    vehicleId2 = intent.getIntExtra("userID",0);
 
-                    System.out.println(TAG+" -- Intent- userID : " + userID2);
-                    System.out.println(TAG+" -- Intent- getLevel_code : " + getLevel_code2);
-                    System.out.println(TAG+" -- Intent- vehicleId : " + vehicleId2);
+                    LocationHelper.getUserRequesting(context);
+                    Gson gson = new Gson();
+                    userDetails = gson.fromJson(LocationHelper.getUserResult(context), UserDetails.class);
+                    if(userDetails!=null){
+                        userID = userDetails.getUser_id();
+                        getLevel_code = userDetails.getLevel_code();
+                        vehicleId = userDetails.getVehicle_id() ;
+                        System.out.println(TAG+" --LocationHelper UserDetail- userID : " + userDetails.getUser_id());
+                        System.out.println(TAG+" --LocationHelper UserDetail- LevelCode : " + userDetails.getLevel_code());
+                        System.out.println(TAG+" --LocationHelper UserDetail- vehicleId : " + userDetails.getVehicle_id());
+                    }
 
-                    userID = LocationUpdatesBroadcastReceiver.userID;
-                    getLevel_code = LocationUpdatesBroadcastReceiver.getLevel_code ;
-                    vehicleId = LocationUpdatesBroadcastReceiver.vehicleId ;
 
                     System.out.println(TAG+" -- UserDetail- userID : " + userID);
                     System.out.println(TAG+" -- UserDetail- getLevel_code : " + getLevel_code);
@@ -100,7 +100,7 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     Location location2 = result.getLastLocation();
                     String locString = "";
                     StringBuilder sb = new StringBuilder();
-                    System.out.println("getLocationResultText getLongitude : "+location2.getLatitude()+"getLongitude : "+location2.getLongitude());
+                    System.out.println("getLocationResultText getLongitude : "+location2.getLatitude()+" ,getLongitude : "+location2.getLongitude());
                     sb.append("(");
                     sb.append(location2.getLatitude());
                     sb.append(", ");
@@ -108,7 +108,7 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     sb.append(")");
                     sb.append("\n");
                     locString = sb.toString();
-                    Toast.makeText(context,TAG+" "+locString,Toast.LENGTH_LONG).show();
+                   // Toast.makeText(context,TAG+" "+locString,Toast.LENGTH_LONG).show();
 
                     Date today = new Date();
 
@@ -137,7 +137,7 @@ public class LocationUpdatesBroadcastReceiver extends BroadcastReceiver {
                     // Save the location data to SharedPreferences.
                     locationResultHelper.saveResults();
                     // Show notification with the location data.
-                    //locationResultHelper.showNotification();
+                   // locationResultHelper.showNotification();
                     Log.i(TAG, LocationHelper.getSavedLocationResult(context));
                 }
             }
