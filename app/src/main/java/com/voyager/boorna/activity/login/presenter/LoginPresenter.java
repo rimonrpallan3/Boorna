@@ -6,9 +6,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.voyager.boorna.R;
 import com.voyager.boorna.activity.login.helper.Helper;
 import com.voyager.boorna.activity.login.model.UserDetails;
 import com.voyager.boorna.activity.login.view.ILoginView;
+import com.voyager.boorna.appconfig.AppConfig;
 import com.voyager.boorna.webservices.ApiClient;
 import com.voyager.boorna.webservices.WebServices;
 
@@ -120,6 +122,9 @@ public class LoginPresenter implements ILoginPresenter{
                     Log.d("LoginPresenter", "validateLoginDataBaseApi  data unSuccess : "+userDetails.getMessage());
                     iLoginView.showErrorMsg(userDetails.getMessage());
                 } else {
+                    if(userDetails.getApi_google_key()!=null){
+                        AppConfig.GOOGLE_MAP_API_KEY=userDetails.getApi_google_key();
+                    }
                     userDetails.setPassword(passwd);
                     userDetails.setFcm(fireBaseToken);
                     Helper.addUserGsonInSharedPrefrences(userDetails,editor);
@@ -132,6 +137,7 @@ public class LoginPresenter implements ILoginPresenter{
 
             @Override
             public void onError(Throwable e) {
+                System.out.println(TAG+" --------- onError : "+e.getMessage());
             }
 
             @Override

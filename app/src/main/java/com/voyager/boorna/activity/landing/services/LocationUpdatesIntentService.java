@@ -47,6 +47,11 @@ public class LocationUpdatesIntentService extends IntentService {
                     ".PROCESS_UPDATES";
     private static final String TAG = LocationUpdatesIntentService.class.getSimpleName();
 
+    Integer userID2 = 0;
+    String getLevel_code2 = "";
+    Integer vehicleId2 = 0;
+
+
 
     public LocationUpdatesIntentService() {
         // Name the worker thread.
@@ -60,9 +65,31 @@ public class LocationUpdatesIntentService extends IntentService {
             if (ACTION_PROCESS_UPDATES.equals(action)) {
                 LocationResult result = LocationResult.extractResult(intent);
                 if (result != null) {
+
+                    userID2 = intent.getIntExtra("userID",0);
+                    getLevel_code2= intent.getStringExtra("getLevel_code");
+                    vehicleId2 = intent.getIntExtra("vehicleId",0);
+
+                    System.out.println(TAG+" --my.action.string Intent- userID : " + userID2);
+                    System.out.println(TAG+" --my.action.string Intent- getLevel_code : " + getLevel_code2);
+                    System.out.println(TAG+" --my.action.string Intent- vehicleId : " + vehicleId2);
                     List<Location> locations = result.getLocations();
                     String locString = "";
                     StringBuilder sb = new StringBuilder();
+
+
+
+                    Location location2 = result.getLastLocation();
+                    System.out.println("getLocationResultText getLongitude : "+location2.getLatitude()+"getLongitude : "+location2.getLongitude());
+                    sb.append("(");
+                    sb.append(location2.getLatitude());
+                    sb.append(", ");
+                    sb.append(location2.getLongitude());
+                    sb.append(")");
+                    sb.append("\n");
+                    locString = sb.toString();
+
+
                     for (Location location : locations) {
                         System.out.println("getLocationResultText getLongitude : "+location.getLatitude()+"getLongitude : "+location.getLongitude());
                         sb.append("(");

@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.voyager.boorna.R;
@@ -60,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     String value="";
     UserDetails userDetails;
     private int SPLASH_DISPLAY_LENGTH = 2;
+    private FirebaseAuth mAuth;
+    FirebaseUser currentUserFireBase;
 
 
     @Override
@@ -93,7 +97,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         loadingLayout = findViewById(R.id.loadingLayout);
         iLoginPresenter = new LoginPresenter(this);
         fireBaseToken = FirebaseInstanceId.getInstance().getToken();
+        mAuth = FirebaseAuth.getInstance();
         Log.d("SplashPresenter", "fireBaseToken  : " +fireBaseToken);
+        FirebaseUser currentUserFireBase = mAuth.getCurrentUser();
+
 
     }
 
@@ -139,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             }else {
                 emailAddress = "";
             }
-            System.out.println("--------- SplashPresenter getUserGsonInSharedPrefrences"+json);
+            System.out.println(TAG+"---------  getUserGsonInSharedPrefrences"+json);
         }
         return emailAddress;
     }
@@ -155,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         iLoginPresenter.setProgressBarVisiblity(View.INVISIBLE);
         btnSignIn.setEnabled(true);
         if (result){
+            System.out.println(TAG+"---------  onLoginResult");
         }
         else {
             //Toast.makeText(this, "Please input Values, code = " + code, Toast.LENGTH_SHORT).show();
@@ -168,6 +176,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnSignIn.setEnabled(true);
         if (result){
             iLoginPresenter.onLoginSucuess();
+            System.out.println(TAG+"---------  onLoginResponse");
         }
         else {
             //Toast.makeText(this,  getResources().getString(R.string.login_error_txt), Toast.LENGTH_SHORT).show();
@@ -185,6 +194,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void sendPParcelableObj(UserDetails userDetails) {
+        System.out.println(TAG+"---------  sendPParcelableObj");
         Intent intent = new Intent(this, LandingActivity.class);
         intent.putExtra("LoginDone", "Done");
         Gson gson = new Gson();
@@ -214,9 +224,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void onStart() {
         super.onStart();
-        /*if (mAuthListener != null) {
-            mAuth.addAuthStateListener(mAuthListener);
-        }*/
+
     }
     @Override
     protected void onDestroy() {

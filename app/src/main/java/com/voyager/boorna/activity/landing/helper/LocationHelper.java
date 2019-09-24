@@ -257,10 +257,10 @@ public class LocationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationBuilder = new Notification.Builder(mContext,
                     PRIMARY_CHANNEL)
-                    .setContentTitle(getLocationResultTitle())
-                    .setContentText(getLocationResultText())
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setAutoCancel(true)
+                    .setContentTitle("Searching for GPS")
+                    .setContentText("Boorna")
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setAutoCancel(false)
                     .setContentIntent(notificationPendingIntent);
         }
 

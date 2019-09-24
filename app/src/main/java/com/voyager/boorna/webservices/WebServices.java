@@ -36,6 +36,14 @@ public interface WebServices {
                                                   @Nullable @Field("lat") double driverLatitude,
                                                   @Nullable @Field("long") double driverLongitude,
                                                   @Nullable @Field("datetime") String dateTime);
+    @FormUrlEncoded
+    @POST("driverLocationSave")
+    Observable<DriverDetails> driverProfileStatus2(@Nullable @Field("driver_id") int driverID,
+                                                  @Nullable @Field("vehicle_id") int vehicleId,
+                                                  @Nullable @Field("level_code") String level_code,
+                                                  @Nullable @Field("lat") double driverLatitude,
+                                                  @Nullable @Field("long") double driverLongitude,
+                                                  @Nullable @Field("datetime") String dateTime);
 
     /*   @GET("listings/4/0")
        Call<MainList> doGetHouseList();
